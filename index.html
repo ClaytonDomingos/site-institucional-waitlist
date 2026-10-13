@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Meu Guia · Roteiros de viagem com mapa correto, partindo do seu hotel</title>
+    <meta
+      name="description"
+      content="Roteiro dia a dia partindo do seu hotel, com mapa geograficamente correto, como chegar em cada trecho, PDF com letra grande e modo viagem. Atrações verificadas por um agente com 25 anos de turismo. Entre na lista de espera."
+    />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+    <meta property="og:title" content="Meu Guia · Roteiros de viagem com mapa correto" />
+    <meta property="og:description" content="Roteiro dia a dia partindo do seu hotel, com mapa correto, como chegar e PDF para imprimir. Entre na lista de espera." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1752650143291-a049c42b15f2?w=1200&h=630&q=80&auto=format&fit=crop" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <script>
+      /* aplica o tema salvo antes da primeira pintura (sem piscar branco no escuro) */
+      try {
+        if (localStorage.getItem("proto-theme") === "dark") {
+          document.documentElement.classList.add("dark");
+          document.documentElement.style.colorScheme = "dark";
+        }
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

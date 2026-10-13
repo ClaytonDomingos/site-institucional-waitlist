@@ -1,0 +1,644 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---------------------------------------------------------------------------
+   Tech Standard — design system
+
+   Estilo do ReUI (reui.io), que segue o shadcn/ui na paleta neutral:
+   página branca, cartões brancos com borda de 1px, raio 12 e sombra quase
+   invisível; controles compactos (32px) com borda e shadow-xs, raio 8;
+   primário preto (vira claro no tema escuro); foco com anel cinza; badges
+   "light" (fundo 10% + borda 15% da cor, texto escuro do tom); a moldura
+   cinza (Frame) com painel branco dentro é a peça-assinatura do ReUI.
+
+   Regra de cor: --money (verde) é reservado a dinheiro/resultado financeiro.
+   Ação e seleção usam --primary (preto). Nunca invente cor nova: use os
+   tokens abaixo pelas classes do Tailwind (bg-card, text-muted…).
+--------------------------------------------------------------------------- */
+
+:root {
+  /* superfícies (nomes do shadcn entre parênteses) */
+  --bg: #ffffff; /* background */
+  --card: #ffffff; /* card — o bloco principal, com borda */
+  --surface: #fafafa; /* muted/50 — moldura (Frame), faixas cinza, sidebar */
+  --surface-2: #ffffff; /* popover — tile dentro do cartão, painel do Frame, menus */
+  --surface-3: #f5f5f5; /* muted — trilhas, contagens, trilho do Segmented */
+  --surface-hover: #f5f5f5; /* accent — hover de item de menu e botão ghost */
+  --control: #ffffff; /* input, select, botão secundário */
+  --control-hover: #f5f5f5;
+
+  --border: #e5e5e5; /* border / input */
+  --border-strong: #d4d4d4;
+  --ring: #a3a3a3; /* ring — anel de foco */
+
+  --fg: #0a0a0a; /* foreground */
+  --muted: #737373; /* muted-foreground */
+  --faint: #a3a3a3;
+  --placeholder: #a3a3a3;
+
+  /* ação: preto no claro, quase branco no escuro */
+  --primary: #171717;
+  --primary-hover: #262626;
+  --primary-fg: #fafafa;
+  --primary-soft: #f5f5f5; /* fundo de item selecionado */
+  --solid-fg: #ffffff; /* texto sobre fundo colorido (vermelho, verde…) nos dois temas */
+  /* acento do modo viagem (pôr do sol): vira o primário do app enquanto o modo está ligado */
+  --viagem: #ea580c;
+  --viagem-fg: #ffffff;
+
+  /* tons: a cor base (texto, ícone, fundo cheio) e o -fg, texto do badge "light" */
+  --money: #059669; /* emerald-600 — exclusivo de dinheiro */
+  --money-fg: #065f46;
+  --lime: #65a30d;
+  --lime-fg: #3f6212;
+  --blue: #2563eb;
+  --blue-fg: #1e40af;
+  --amber: #d97706;
+  --amber-fg: #92400e;
+  --red: #dc2626;
+  --red-fg: #991b1b;
+  --purple: #7c3aed; /* violet — o "info" do ReUI; aqui, IA/automação */
+  --purple-fg: #5b21b6;
+  --cyan: #0891b2;
+  --cyan-fg: #155e75;
+  --yellow: #ca8a04;
+  --yellow-fg: #854d0e;
+
+  /* gráficos — os tons dos templates do ReUI */
+  --chart-blue: #3b82f6;
+  --chart-sky: #7dd3fc;
+  --chart-yellow: #f59e0b;
+  --chart-emerald: #10b981;
+  --chart-purple: #8b5cf6;
+  --chart-pink: #ec4899;
+  --chart-teal: #14b8a6;
+  --chart-indigo: #6366f1;
+  --chart-lime: #84cc16;
+  --chart-track: #f5f5f5;
+  --chart-neutral: #e5e5e5;
+
+  --avatar-bg: #e5e5e5;
+  --avatar-fg: #525252;
+  --overlay: rgb(0 0 0 / 0.4);
+
+  /* sombras — as do shadcn, bem leves */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+  --shadow-dropdown: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-dialog: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+
+  /* fundo "papel" (landing e contêiner do Leaflet) */
+  --map-paper: #f6f3ec;
+  --map-grid: rgb(120 100 60 / 0.07);
+
+  /* raios */
+  --radius: 12px; /* cartão, moldura, tabela, modal */
+  --radius-sm: 8px; /* tile, controle, botão, item de menu */
+  --radius-xs: 5px; /* badge, contagem, item do segmented */
+}
+
+.dark {
+  --bg: #0a0a0a;
+  --card: #111111;
+  --surface: #141414;
+  --surface-2: #171717;
+  --surface-3: #262626;
+  --surface-hover: #262626;
+  --control: #171717;
+  --control-hover: #262626;
+
+  --border: #262626;
+  --border-strong: #404040;
+  --ring: #737373;
+
+  --fg: #fafafa;
+  --muted: #a3a3a3;
+  --faint: #737373;
+  --placeholder: #737373;
+
+  --primary: #e5e5e5;
+  --primary-hover: #d4d4d4;
+  --primary-fg: #171717;
+  --primary-soft: #262626;
+  --viagem: #fb923c;
+  --viagem-fg: #431407;
+
+  --money: #10b981;
+  --money-fg: #34d399;
+  --lime: #84cc16;
+  --lime-fg: #a3e635;
+  --blue: #3b82f6;
+  --blue-fg: #60a5fa;
+  --amber: #f59e0b;
+  --amber-fg: #fbbf24;
+  --red: #ef4444;
+  --red-fg: #f87171;
+  --purple: #8b5cf6;
+  --purple-fg: #a78bfa;
+  --cyan: #06b6d4;
+  --cyan-fg: #22d3ee;
+  --yellow: #eab308;
+  --yellow-fg: #facc15;
+
+  --chart-blue: #3b82f6;
+  --chart-sky: #38bdf8;
+  --chart-track: #1f1f1f;
+  --chart-neutral: #404040;
+
+  --map-paper: #16181c;
+  --map-grid: rgb(255 255 255 / 0.04);
+
+  --avatar-bg: #262626;
+  --avatar-fg: #a3a3a3;
+  --overlay: rgb(0 0 0 / 0.6);
+
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.25);
+  --shadow-dropdown: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-dialog: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-surface-hover: var(--surface-hover);
+  --color-track: var(--surface-3); /* trilho do Segmented (kit mobile) */
+  --color-control: var(--control);
+  --color-control-hover: var(--control-hover);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-ring: var(--ring);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-fg: var(--primary-fg);
+  --color-primary-soft: var(--primary-soft);
+  --color-solid-fg: var(--solid-fg);
+  --color-viagem: var(--viagem);
+  --color-viagem-fg: var(--viagem-fg);
+  --color-money: var(--money);
+  --color-money-fg: var(--money-fg);
+  --color-lime: var(--lime);
+  --color-lime-fg: var(--lime-fg);
+  --color-blue: var(--blue);
+  --color-blue-fg: var(--blue-fg);
+  --color-amber: var(--amber);
+  --color-amber-fg: var(--amber-fg);
+  --color-red: var(--red);
+  --color-red-fg: var(--red-fg);
+  --color-purple: var(--purple);
+  --color-purple-fg: var(--purple-fg);
+  --color-cyan: var(--cyan);
+  --color-cyan-fg: var(--cyan-fg);
+  --color-yellow: var(--yellow);
+  --color-yellow-fg: var(--yellow-fg);
+  --color-overlay: var(--overlay);
+  --color-avatar: var(--avatar-bg);
+  --color-avatar-fg: var(--avatar-fg);
+  --radius-card: var(--radius);
+  --radius-tile: var(--radius-sm);
+  --radius-badge: var(--radius-xs);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-card: var(--shadow-card);
+  --shadow-dropdown: var(--shadow-dropdown);
+  --shadow-dialog: var(--shadow-dialog);
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 20px;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "cv11";
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--blue) 20%, transparent);
+  }
+  ::placeholder {
+    color: var(--placeholder);
+  }
+}
+
+/* --------------------------- escala tipográfica --------------------------- */
+/* Corpo 14/20 como no shadcn. Só os títulos grandes têm o leve tracking-tight */
+/* do ReUI — já embutido aqui; não acrescente tracking à mão.                 */
+
+@utility text-body {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+@utility text-body-2 {
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: 0;
+}
+@utility text-caption {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0;
+}
+@utility text-caption-2 {
+  font-size: 11px;
+  line-height: 14px;
+  letter-spacing: 0.1px;
+}
+@utility text-headline {
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: -0.005em;
+}
+@utility text-title-3 {
+  font-size: 17px;
+  line-height: 24px;
+  letter-spacing: -0.01em;
+}
+@utility text-title-2 {
+  font-size: 20px;
+  line-height: 28px;
+  letter-spacing: -0.015em;
+}
+@utility text-title-1 {
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.02em;
+}
+
+@utility num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* rolagem discreta */
+@utility scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 999px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+@utility scroll-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* hachura diagonal do ReUI (barras e áreas dos gráficos, faixa "em andamento").
+   A cor vem de currentColor: <div className="hatch text-chart-… "/> ou style={{ color }} */
+@utility hatch {
+  background-image: repeating-linear-gradient(-45deg, currentColor 0 1px, transparent 1px 6px);
+}
+
+/* ------------------------------- superfícies ------------------------------ */
+/* As receitas que se repetem no kit inteiro. Use direto no className:        */
+/*   <div className="tile p-3">…</div>                                        */
+
+/* bloco dentro do cartão: linha de lista, métrica, cartão do kanban */
+@utility tile {
+  @apply rounded-tile border border-line bg-surface-2 shadow-card;
+}
+
+/* moldura cinza do ReUI (Frame): borda, fundo muted e 3px de respiro em volta do painel */
+@utility frame {
+  @apply rounded-card border border-line bg-surface p-[3px];
+}
+
+/* painel branco dentro da moldura — raio concêntrico (12 − 3 − 1) */
+@utility frame-panel {
+  @apply rounded-[8px] border border-line bg-surface-2 shadow-card;
+}
+
+/* controle com borda: botão secondary, chip, grupo de botões */
+@utility control {
+  @apply rounded-tile border border-line bg-control shadow-xs;
+}
+
+/* campo de formulário: o `control` + anel de foco cinza (vermelho com aria-invalid).
+   Funciona no próprio <input> e em caixas que têm um input dentro. */
+@utility field {
+  @apply rounded-tile border border-line bg-control text-body text-fg shadow-xs;
+  --field-ring: var(--ring);
+  transition:
+    border-color 150ms,
+    box-shadow 150ms;
+  &:is([aria-invalid="true"], :has([aria-invalid="true"])) {
+    --field-ring: var(--red);
+    border-color: var(--red);
+  }
+  &:is(:focus, :focus-within) {
+    outline: none;
+    border-color: var(--field-ring);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--field-ring) 30%, transparent);
+  }
+  /* option desabilitada (placeholder do Select) não conta */
+  &:is(:disabled, :has(:is(input, textarea, select, button):disabled)) {
+    background: var(--surface);
+    color: var(--faint);
+    box-shadow: none;
+  }
+}
+
+/* painel que flutua perto do gatilho: dropdown, popover, tooltip de gráfico */
+@utility floating {
+  @apply rounded-tile border border-line bg-surface-2 shadow-dropdown;
+}
+
+/* camada sobre a página: modal, drawer, ⌘K */
+@utility dialog {
+  @apply rounded-card border border-line bg-surface-2 shadow-dialog;
+}
+
+/* anel de foco do teclado — todo elemento clicável que não é input */
+@utility focus-ring {
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 45%, transparent);
+  }
+}
+
+@keyframes rc-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes rc-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  60% {
+    transform: scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes rc-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes rc-slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes rc-sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@utility animate-slide-in-left {
+  animation: rc-slide-in-left 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@utility animate-sheet-up {
+  animation: rc-sheet-up 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@utility animate-fade-up {
+  animation: rc-fade-up 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@utility animate-pop {
+  animation: rc-pop 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@utility animate-slide-in {
+  animation: rc-slide-in 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes rc-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+@keyframes rc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* esqueleto de carregamento: trilha cinza com brilho passando */
+@utility animate-shimmer {
+  background-image: linear-gradient(90deg, var(--surface-3) 0%, var(--surface-hover) 40%, var(--control-hover) 50%, var(--surface-3) 60%);
+  background-size: 200% 100%;
+  animation: rc-shimmer 1.4s linear infinite;
+}
+@utility animate-spin-slow {
+  animation: rc-spin 0.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===========================================================================
+   Utilidades do kit mobile do app (título grande, folhas que sobem de
+   baixo, transições). Copiadas como estão: o kit (BottomSheet, Popover…)
+   usa algumas delas.
+=========================================================================== */
+
+@utility text-large-title {
+  font-size: 28px;
+  line-height: 34px;
+  letter-spacing: -0.02em;
+}
+
+/* folha que sobe de baixo: Modal, BottomSheet, Dropdown (folha de ações), busca */
+@utility sheet {
+  @apply rounded-t-2xl border border-b-0 border-line bg-surface-2 shadow-dialog;
+}
+
+/* toque: encolhe de leve ao pressionar (linhas de lista, cartões clicáveis) */
+@utility pressable {
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color 150ms,
+    transform 150ms;
+  &:active {
+    transform: scale(0.985);
+  }
+}
+
+@keyframes rc-push {
+  from {
+    opacity: 0.4;
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes rc-pop-back {
+  from {
+    opacity: 0.4;
+    transform: translateX(-28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes rc-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes rc-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@utility animate-push {
+  animation: rc-push 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@utility animate-pop-back {
+  animation: rc-pop-back 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@utility animate-fade {
+  animation: rc-fade 0.2s ease-out both;
+}
+@utility animate-drop {
+  animation: rc-drop 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ------------------------------ modo viagem ------------------------------- */
+/* Igual ao app: o bloco recebe .dark (tokens escuros só dentro dele) e       */
+/* data-modo="viagem", que põe o acento de pôr do sol no lugar do primário.   */
+[data-modo="viagem"] {
+  --primary: var(--viagem);
+  --primary-hover: #f97316;
+  --primary-fg: var(--viagem-fg);
+  --primary-soft: rgb(251 146 60 / 0.14);
+  --ring: rgb(251 146 60 / 0.6);
+  color-scheme: dark;
+}
+
+/* ------------------------------- Leaflet ---------------------------------- */
+/* marcadores divIcon sem o fundo branco padrão do Leaflet */
+.leaflet-div-icon.mg-pino,
+.leaflet-div-icon.mg-marcador {
+  background: transparent;
+  border: 0;
+}
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: var(--map-paper);
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: var(--shadow-dialog);
+}
+.leaflet-popup-content {
+  margin: 10px 12px;
+}
+.dark .leaflet-popup-content-wrapper,
+.dark .leaflet-popup-tip {
+  background: var(--surface-2);
+  color: var(--fg);
+}
+.dark .leaflet-tile-pane {
+  filter: brightness(0.72) contrast(1.08) saturate(0.8);
+}
+
+
+@keyframes mg-pulso {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+.mg-pulso {
+  animation: mg-pulso 1.8s ease-out infinite;
+}
+
+/* --------------------------------- site ----------------------------------- */
+/* o app prende html/body/#root na altura da tela; o site rola o documento */
+html,
+body,
+#root {
+  height: auto;
+  min-height: 100%;
+}
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+/* âncoras não ficam escondidas atrás do cabeçalho fixo */
+section[id] {
+  scroll-margin-top: 64px;
+}
