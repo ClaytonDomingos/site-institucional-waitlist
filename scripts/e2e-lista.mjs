@@ -3,7 +3,7 @@
    node scripts/e2e-lista.mjs [url] [pasta-das-capturas]
    ex.: node scripts/e2e-lista.mjs http://localhost:5211/ .shots/e2e
    Com o servidor de teste (scripts/servidor-teste.mjs) rodando, confere também
-   o que chegou nele (CONFERIR=http://localhost:54321/inscricoes). */
+   o que ficou gravado nele (CONFERIR=http://localhost:54321/inscricoes). */
 import { mkdirSync } from "node:fs";
 import { chromium } from "playwright-core";
 
@@ -12,27 +12,33 @@ mkdirSync(pasta, { recursive: true });
 const sufixo = Date.now().toString(36);
 const emailViajante = `marina.${sufixo}@exemplo.com`;
 const emailAgencia = `juliana.${sufixo}@rotasul.com.br`;
+const emailFormula = `ana.${sufixo}@exemplo.com`;
+const emailRobo = `robo.${sufixo}@spam.com`;
 
 const browser = await chromium.launch({ executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe" });
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 const erros = [];
 page.on("pageerror", (e) => erros.push(e.message));
-/* o 409 do e-mail repetido é esperado (o Chrome registra toda resposta não 2xx no console) */
-page.on("console", (m) => m.type() === "error" && !m.text().includes("status of 409") && erros.push(m.text()));
+page.on("console", (m) => m.type() === "error" && erros.push(m.text()));
 
 let falhas = 0;
+const falhar = (msg) => {
+  falhas++;
+  console.log("FALHOU", msg);
+};
 const passo = async (nome, fn) => {
   try {
     await fn();
     console.log("ok  ", nome);
   } catch (e) {
-    falhas++;
-    console.log("FALHOU", nome, "\n     ", e.message.split("\n")[0]);
+    falhar(`${nome}\n      ${e.message.split("\n")[0]}`);
   }
 };
 const form = page.locator("#lista form");
 const campo = (id) => page.locator(`#lista-${id}`);
 const enviar = () => form.getByRole("button", { name: "Entrar na lista" }).click();
+const outra = () => page.getByRole("button", { name: "Inscrever outra pessoa" }).click();
+const local = () => page.evaluate(() => JSON.parse(localStorage.getItem("meuguia-lista-espera") ?? "[]"));
 
 await page.goto(URL, { waitUntil: "networkidle" });
 await page.evaluate(() => localStorage.removeItem("meuguia-lista-espera"));
@@ -68,20 +74,29 @@ await passo("viajante entra na lista (máscara de WhatsApp, destino)", async () 
   await page.screenshot({ path: `${pasta}/1-preenchido.png` });
   await enviar();
   await page.getByText("Você está na lista, Marina").waitFor({ timeout: 15000 });
+  await page.waitForTimeout(400);
   await page.screenshot({ path: `${pasta}/2-inscrito.png` });
 });
 
-/* o webhook não sabe se o e-mail já existe: rode com SEM_DUPLICADO=1 (a deduplicação fica do lado do n8n/planilha) */
-await passo(process.env.SEM_DUPLICADO ? "o mesmo e-mail de novo é aceito (webhook)" : "o mesmo e-mail de novo vira “já está na lista”", async () => {
-  await page.getByRole("button", { name: "Inscrever outra pessoa" }).click();
+await passo("o mesmo e-mail de novo recebe a mesma confirmação (não revela quem está na lista)", async () => {
+  await outra();
   await campo("nome").fill("Marina L.");
   await campo("email").fill(emailViajante);
   await enviar();
-  await page.getByText(process.env.SEM_DUPLICADO ? "Você está na lista, Marina" : "Você já está na lista, Marina").waitFor({ timeout: 15000 });
+  await page.getByText("Você está na lista, Marina").waitFor({ timeout: 15000 });
+});
+
+await passo("nome começando com = é limpo antes de gravar (sem fórmula na planilha)", async () => {
+  await outra();
+  await campo("nome").fill("=Ana Teste");
+  await campo("email").fill(emailFormula);
+  await campo("destino").fill("+Roma");
+  await enviar();
+  await page.getByText("Você está na lista, Ana").waitFor({ timeout: 15000 });
 });
 
 await passo("“Quero para minha agência” troca o perfil para agência", async () => {
-  await page.getByRole("button", { name: "Inscrever outra pessoa" }).click();
+  await outra();
   await page.getByRole("button", { name: "Quero para minha agência" }).click();
   await page.waitForTimeout(900);
   const marcado = await page.locator("#lista").getByRole("radio", { name: "Agência de viagens" }).getAttribute("aria-checked");
@@ -101,41 +116,38 @@ await passo("agência entra na lista", async () => {
   await campo("agencia").fill("Rota Sul Viagens");
   await enviar();
   await page.getByText("Recebemos o contato da Rota Sul Viagens").waitFor({ timeout: 15000 });
+  await page.waitForTimeout(400);
   await page.screenshot({ path: `${pasta}/3-agencia.png` });
 });
 
-await passo("campo-armadilha preenchido: finge sucesso e não grava", async () => {
-  const antes = await page.evaluate(() => JSON.parse(localStorage.getItem("meuguia-lista-espera") ?? "[]").length);
-  await page.getByRole("button", { name: "Inscrever outra pessoa" }).click();
+await passo("campo-armadilha preenchido: finge sucesso e não envia", async () => {
+  const antes = (await local()).length;
+  await outra();
   await page.locator("#lista").getByRole("radio", { name: "Viajante" }).click();
   await campo("nome").fill("Robô");
-  await campo("email").fill(`robo.${sufixo}@spam.com`);
+  await campo("email").fill(emailRobo);
   await page.locator('#lista input[tabindex="-1"]').fill("http://spam.example");
   await enviar();
   await page.getByText("Você está na lista, Robô").waitFor({ timeout: 5000 });
-  const depois = await page.evaluate(() => JSON.parse(localStorage.getItem("meuguia-lista-espera") ?? "[]").length);
-  if (depois !== antes) throw new Error("gravou a inscrição do robô");
+  if ((await local()).length !== antes) throw new Error("gravou a inscrição do robô");
 });
 
-const local = await page.evaluate(() => JSON.parse(localStorage.getItem("meuguia-lista-espera") ?? "[]"));
-if (local.length) console.log(`\nlocalStorage (modo demonstração): ${local.length} inscrição(ões)`);
-for (const l of local) console.log("  ", JSON.stringify(l));
+/* o que ficou gravado: no navegador (demonstração) ou no servidor de teste */
+const gravadas = process.env.CONFERIR ? (await (await fetch(process.env.CONFERIR)).json()).filter((r) => r.email?.includes(sufixo)) : await local();
+console.log(`\ngravadas ${process.env.CONFERIR ? "no servidor de teste" : "no localStorage (demonstração)"}: ${gravadas.length}`);
+for (const g of gravadas) console.log("  ", JSON.stringify(g));
 
-if (process.env.CONFERIR) {
-  const recebidas = await (await fetch(process.env.CONFERIR)).json();
-  const nossas = recebidas.filter((r) => r.email?.includes(sufixo));
-  console.log(`\nservidor de teste: ${nossas.length} inscrição(ões) deste teste`);
-  for (const r of nossas) console.log("  ", JSON.stringify(r));
-  if (nossas.some((r) => r.email.includes("robo."))) {
-    falhas++;
-    console.log("FALHOU a armadilha deixou passar o robô");
-  }
-}
+const doEmail = (e) => gravadas.filter((g) => g.email === e);
+/* o webhook recebe tudo; quem deduplica é o fluxo (n8n/planilha) */
+const deduplica = !gravadas.some((g) => g.via === "webhook");
+if (deduplica && doEmail(emailViajante).length !== 1) falhar(`e-mail repetido gravado ${doEmail(emailViajante).length} vezes`);
+if (doEmail(emailViajante)[0]?.destino !== "Lisboa") falhar("destino da Marina não gravado");
+const ana = doEmail(emailFormula)[0];
+if (!ana || ana.nome !== "Ana Teste" || ana.destino !== "Roma") falhar(`texto com fórmula não foi limpo: ${JSON.stringify(ana)}`);
+if (doEmail(emailAgencia)[0]?.agencia !== "Rota Sul Viagens") falhar("agência não gravada");
+if (doEmail(emailRobo).length) falhar("a armadilha deixou passar o robô");
 
-if (erros.length) {
-  falhas++;
-  console.log("\nERROS NO CONSOLE:\n" + erros.join("\n"));
-}
+if (erros.length) falhar("erros no console:\n" + erros.join("\n"));
 await browser.close();
 console.log(falhas ? `\n${falhas} falha(s)` : "\ntudo certo");
 process.exit(falhas ? 1 : 0);

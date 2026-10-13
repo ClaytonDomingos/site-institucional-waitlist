@@ -4,7 +4,7 @@
    gerador do Meu Guia). Coordenadas conferidas no Nominatim e margem do Sena
    calculada com a geometria real do rio (pnpm validar:geo no app).
    `foto` é o id da foto no Unsplash (images.unsplash.com/photo-<id>).
-   Se o roteiro de exemplo mudar no app, exporte de novo.
+   NÃO edite à mão: gere de novo com scripts/exportar-exemplo.ts.
 --------------------------------------------------------------------------- */
 
 export type Margem = "norte" | "sul" | null;

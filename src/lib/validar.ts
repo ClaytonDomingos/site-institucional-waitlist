@@ -2,6 +2,12 @@
 
 export const digitos = (v: string) => v.replace(/\D/g, "");
 
+/** Texto livre sem os caracteres que fazem uma célula virar fórmula no Excel ou no Google Planilhas
+ *  (= + - @ e tab/CR no começo). O banco e a planilha também se protegem; aqui é para quem digitou sem querer. */
+export function semFormula(v: string | null | undefined, max = 120): string | null {
+  return v?.trim().replace(/^[\s=+@-]+/, "").slice(0, max) || null;
+}
+
 export function emailValido(v: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
 }

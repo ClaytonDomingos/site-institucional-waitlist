@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Bell, CircleAlert, CircleCheck, MapPinned, MessageCircle, Send, Ticket } from "lucide-react";
 import { IMG } from "@/conteudo/imagens";
 import { DESTINOS, ROTEIROS_GRATIS } from "@/conteudo/site";
-import { DESTINO, entrarNaLista, type Perfil, type Resultado } from "@/lib/lista-espera";
-import { emailValido, fmtTelefone, telefoneValido } from "@/lib/validar";
+import { DESTINO, entrarNaLista, type Perfil } from "@/lib/lista-espera";
+import { emailValido, fmtTelefone, semFormula, telefoneValido } from "@/lib/validar";
 import { Button, Field, Frame, Input, Label, Note, SafeImage, Segmented } from "@/components/ui";
 import { Container, FUNDO_PAPEL, TituloSecao, rolarPara } from "@/components/base";
 import { abrirPrivacidade } from "./Privacidade";
@@ -38,12 +38,13 @@ const VAZIO: Dados = { nome: "", email: "", whatsapp: "", agencia: "", destino: 
 
 function validar(perfil: Perfil, d: Dados): Erros {
   const e: Erros = {};
-  if (d.nome.trim().length < 3) e.nome = "Informe seu nome";
+  /* mede o texto já limpo, o mesmo que vai ser gravado */
+  if ((semFormula(d.nome) ?? "").length < 3) e.nome = "Informe seu nome";
   if (!d.email.trim()) e.email = "Informe seu e-mail";
   else if (!emailValido(d.email)) e.email = "E-mail inválido. Confira se tem @ e o domínio";
   if (perfil === "agencia" && !d.whatsapp) e.whatsapp = "Informe o WhatsApp da agência";
   else if (d.whatsapp && !telefoneValido(d.whatsapp)) e.whatsapp = "WhatsApp inválido. Use (99) 99999-9999";
-  if (perfil === "agencia" && d.agencia.trim().length < 2) e.agencia = "Informe o nome da agência";
+  if (perfil === "agencia" && (semFormula(d.agencia) ?? "").length < 2) e.agencia = "Informe o nome da agência";
   return e;
 }
 
@@ -63,7 +64,7 @@ export function ListaEspera() {
   const [armadilha, setArmadilha] = useState("");
   const [enviando, setEnviando] = useState(false);
   const [falha, setFalha] = useState<string | null>(null);
-  const [feito, setFeito] = useState<{ resultado: Resultado; perfil: Perfil; dados: Dados } | null>(null);
+  const [feito, setFeito] = useState<{ perfil: Perfil; dados: Dados } | null>(null);
 
   /* chamado por irParaLista(): troca o perfil e põe o cursor no campo certo depois da rolagem */
   useEffect(() => {
@@ -98,13 +99,13 @@ export function ListaEspera() {
     }
     /* robô preencheu o campo escondido: finge que deu certo e não grava nada */
     if (armadilha) {
-      setFeito({ resultado: "inscrito", perfil, dados: d });
+      setFeito({ perfil, dados: d });
       return;
     }
     setEnviando(true);
     try {
-      const resultado = await entrarNaLista({ perfil, nome: d.nome, email: d.email, whatsapp: d.whatsapp, agencia: d.agencia, destino: d.destino });
-      setFeito({ resultado, perfil, dados: d });
+      await entrarNaLista({ perfil, nome: d.nome, email: d.email, whatsapp: d.whatsapp, agencia: d.agencia, destino: d.destino });
+      setFeito({ perfil, dados: d });
     } catch (err) {
       setFalha(err instanceof Error ? err.message : "Não foi possível entrar na lista agora. Tente de novo.");
     } finally {
@@ -112,12 +113,20 @@ export function ListaEspera() {
     }
   };
 
+  /* depois de "Inscrever outra pessoa", o cursor volta ao nome assim que o formulário reaparece */
+  const focarNome = useRef(false);
+  useEffect(() => {
+    if (feito || !focarNome.current) return;
+    focarNome.current = false;
+    document.getElementById("lista-nome")?.focus();
+  }, [feito]);
+
   const recomecar = () => {
+    focarNome.current = true;
     setFeito(null);
     setD(VAZIO);
     setErros({});
     setTentou(false);
-    window.setTimeout(() => document.getElementById("lista-nome")?.focus(), 50);
   };
 
   return (
@@ -250,18 +259,15 @@ export function ListaEspera() {
   );
 }
 
-function Confirmacao({ feito, onRecomecar }: { feito: { resultado: Resultado; perfil: Perfil; dados: Dados }; onRecomecar: () => void }) {
-  const { resultado, perfil, dados } = feito;
-  const primeiro = dados.nome.trim().split(/\s+/)[0];
+function Confirmacao({ feito, onRecomecar }: { feito: { perfil: Perfil; dados: Dados }; onRecomecar: () => void }) {
+  const { perfil, dados } = feito;
+  /* mostra o que foi gravado: texto limpo e e-mail em minúsculas */
+  const primeiro = (semFormula(dados.nome) ?? "").split(/\s+/)[0];
   const email = dados.email.trim().toLowerCase();
   const convite = encodeURIComponent(`Entrei na lista de espera do Meu Guia: roteiros de viagem prontos, com mapa correto, partindo do hotel. Entre também: ${window.location.origin}`);
 
-  const titulo =
-    resultado === "ja_inscrito"
-      ? `Você já está na lista, ${primeiro}`
-      : perfil === "agencia"
-        ? `Recebemos o contato da ${dados.agencia.trim()}`
-        : `Você está na lista, ${primeiro}`;
+  /* e-mail repetido recebe a mesma confirmação: o formulário não revela quem já está na lista */
+  const titulo = perfil === "agencia" ? `Recebemos o contato da ${semFormula(dados.agencia)}` : `Você está na lista, ${primeiro}`;
   const texto =
     perfil === "agencia"
       ? `Vamos chamar no WhatsApp ${dados.whatsapp} quando abrirmos para agências, e o aviso também vai para ${email}.`

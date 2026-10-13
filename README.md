@@ -32,8 +32,9 @@ src/
     ui/ charts/    o kit do app, copiado sem alteração
     secoes/        uma seção por arquivo, montadas em pages/Inicio.tsx
     MapaExemplo.tsx, MiniTelas.tsx (miniaturas das telas), FotoComTela.tsx, base.tsx, layout.tsx
-supabase/migrations/   tabela da lista de espera (RLS: o site só insere)
-scripts/           shot.mjs (capturas), e2e-lista.mjs (teste do formulário), servidor-teste.mjs (imita Supabase e webhook)
+supabase/migrations/   lista de espera: tabela fechada para a API + função de inscrição (a única porta do site)
+scripts/           shot.mjs (capturas), e2e-lista.mjs (teste do formulário), servidor-teste.mjs (imita Supabase e webhook),
+                   exportar-exemplo.ts (gera o roteiro de exemplo a partir do app)
 docs/LISTA-DE-ESPERA.md
 ```
 

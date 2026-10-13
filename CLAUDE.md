@@ -16,11 +16,13 @@ O visual é o do app do protótipo (`../clayton-ari-meu-guia`, template Tech Sta
 
 - Textos, números, destinos, planos e dúvidas: `src/conteudo/site.ts`. URLs de imagem: `src/conteudo/imagens.ts` (só `images.unsplash.com`, com `w`/`h` na proporção do lugar; valide com curl). Não espalhe dados pelas seções.
 - Português do Brasil, frases curtas, sem ponto de exclamação; botões dizem a ação.
-- Roteiro de exemplo (`exemplo-paris.ts`) vem do seed do app: não edite à mão.
+- Roteiro de exemplo (`exemplo-paris.ts`) vem do seed do app: não edite à mão, gere com `scripts/exportar-exemplo.ts`.
 
 ## Lista de espera
 
-`src/lib/lista-espera.ts` decide o destino pelas variáveis (Supabase → webhook → localStorage). A tela só chama `entrarNaLista()`. Mudou um campo? Atualize junto: o formulário, `linhaDe()`, a migração em `supabase/migrations`, o `servidor-teste.mjs` e o doc.
+`src/lib/lista-espera.ts` decide o destino pelas variáveis (Supabase → webhook → localStorage). A tela só chama `entrarNaLista()`. Duas regras de segurança: e-mail repetido recebe a mesma confirmação de um novo (não revelar quem está na lista) e texto livre passa por `semFormula()` (nada começando com `= + - @`, que vira fórmula em planilha). No Supabase a tabela é fechada; o site só chama a função `entrar_na_lista_espera`.
+
+Mudou um campo? Atualize junto: o formulário, `linhaDe()`, a migração em `supabase/migrations`, o `servidor-teste.mjs` e o doc.
 
 ## Checagens antes de entregar
 

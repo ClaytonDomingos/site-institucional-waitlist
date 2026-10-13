@@ -1,9 +1,9 @@
 /* Servidor local que imita os dois destinos reais da lista de espera, para
    testar o formulário sem credenciais:
-   - POST /rest/v1/lista_espera   como a API REST do Supabase (PostgREST): exige
-     apikey, responde 201 e 409 para e-mail repetido (unique em lower(email))
-   - POST /webhook                como um webhook do n8n / Apps Script (form-urlencoded)
-   - GET  /inscricoes             o que chegou até agora (para conferir no teste)
+   - POST /rest/v1/rpc/entrar_na_lista_espera   como a função do Supabase: exige
+     apikey, limpa os campos como o SQL, ignora e-mail repetido e responde 204
+   - POST /webhook                               como um webhook do n8n / Apps Script (form-urlencoded)
+   - GET  /inscricoes                            o que ficou gravado (para conferir no teste)
    Responde ao preflight de CORS como o Supabase.
 
    node scripts/servidor-teste.mjs            (porta 54321)
@@ -25,6 +25,9 @@ function responder(res, status, corpo) {
   res.end(corpo ? JSON.stringify(corpo) : undefined);
 }
 
+/* o mesmo que public.lista_espera_limpar() */
+const limpar = (v) => (typeof v === "string" ? v.trim().replace(/^[\s=+@-]+/, "") || null : null);
+
 createServer(async (req, res) => {
   if (req.method === "OPTIONS") return responder(res, 204);
   if (req.method === "GET" && req.url === "/inscricoes") return responder(res, 200, inscricoes);
@@ -32,21 +35,35 @@ createServer(async (req, res) => {
   let texto = "";
   for await (const parte of req) texto += parte;
 
-  if (req.method === "POST" && req.url === "/rest/v1/lista_espera") {
-    const cab = { apikey: req.headers.apikey, authorization: req.headers.authorization ?? null, prefer: req.headers.prefer, contentType: req.headers["content-type"] };
+  if (req.method === "POST" && req.url === "/rest/v1/rpc/entrar_na_lista_espera") {
+    const cab = { apikey: req.headers.apikey, authorization: req.headers.authorization ?? null, contentType: req.headers["content-type"] };
     console.log("[supabase]", JSON.stringify(cab), texto);
     if (!req.headers.apikey) return responder(res, 401, { message: "No API key found in request" });
-    let linha;
+    let p;
     try {
-      linha = JSON.parse(texto);
+      p = JSON.parse(texto);
     } catch {
       return responder(res, 400, { message: "JSON inválido" });
     }
-    if (inscricoes.some((i) => i.email?.toLowerCase() === linha.email?.toLowerCase())) {
-      return responder(res, 409, { code: "23505", message: 'duplicate key value violates unique constraint "lista_espera_email_unico"' });
+    const email = String(p.p_email ?? "").trim().toLowerCase();
+    if (!p.p_perfil || !limpar(p.p_nome) || !email) return responder(res, 400, { code: "23502", message: "campo obrigatório vazio" });
+    /* on conflict (email) do nothing: repetido some sem erro */
+    if (!inscricoes.some((i) => i.via === "supabase" && i.email === email)) {
+      inscricoes.push({
+        via: "supabase",
+        perfil: p.p_perfil,
+        nome: limpar(p.p_nome),
+        email,
+        whatsapp: limpar(p.p_whatsapp),
+        agencia: p.p_perfil === "agencia" ? limpar(p.p_agencia) : null,
+        destino: p.p_perfil === "viajante" ? limpar(p.p_destino) : null,
+        utm_source: limpar(p.p_utm_source),
+        utm_medium: limpar(p.p_utm_medium),
+        utm_campaign: limpar(p.p_utm_campaign),
+        cabecalhos: cab,
+      });
     }
-    inscricoes.push({ via: "supabase", ...linha, cabecalhos: cab });
-    return responder(res, 201);
+    return responder(res, 204);
   }
 
   if (req.method === "POST" && req.url === "/webhook") {
