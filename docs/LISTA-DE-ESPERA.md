@@ -102,4 +102,4 @@ node scripts/e2e-lista.mjs http://localhost:5211/                 # modo demonst
 
 ## LGPD
 
-O formulário pede só o necessário e linka a política de privacidade (`src/components/secoes/Privacidade.tsx`). O texto é um **rascunho**: passe pelo jurídico antes de publicar. Pedidos de exclusão chegam em `contato@meuguia.app`; no Supabase, apague a linha pelo Table Editor.
+O formulário pede só o necessário e linka a política de privacidade (`src/components/secoes/Privacidade.tsx`). O texto é um **rascunho**: passe pelo jurídico antes de publicar. Pedidos de exclusão chegam no e-mail de `EMPRESA` (`src/conteudo/site.ts`; hoje um endereço fictício); no Supabase, apague a linha pelo Table Editor.

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Bell, CircleAlert, CircleCheck, MapPinned, MessageCircle, Send, Ticket } from "lucide-react";
 import { IMG } from "@/conteudo/imagens";
-import { DESTINOS, ROTEIROS_GRATIS } from "@/conteudo/site";
+import { DESTINOS, MARCA, ROTEIROS_GRATIS, SLOGAN } from "@/conteudo/site";
 import { DESTINO, entrarNaLista, type Perfil } from "@/lib/lista-espera";
 import { emailValido, fmtTelefone, semFormula, telefoneValido } from "@/lib/validar";
 import { Button, Field, Frame, Input, Label, Note, SafeImage, Segmented } from "@/components/ui";
@@ -134,7 +134,7 @@ export function ListaEspera() {
       <div aria-hidden className="absolute inset-0 opacity-70" style={FUNDO_PAPEL} />
       <Container className="relative grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
         <div className="lg:col-span-5">
-          <TituloSecao titulo="Entre na lista de espera" subtitulo="O Meu Guia está quase pronto. Deixe seu contato e seja avisado quando abrir." />
+          <TituloSecao titulo="Entre na lista de espera" subtitulo={`O ${MARCA} está quase pronto. Deixe seu contato e seja avisado quando abrir.`} />
           <ul className="mt-6 space-y-3">
             {BENEFICIOS.map((b) => (
               <li key={b.texto} className="flex items-start gap-3 text-body text-fg">
@@ -264,14 +264,14 @@ function Confirmacao({ feito, onRecomecar }: { feito: { perfil: Perfil; dados: D
   /* mostra o que foi gravado: texto limpo e e-mail em minúsculas */
   const primeiro = (semFormula(dados.nome) ?? "").split(/\s+/)[0];
   const email = dados.email.trim().toLowerCase();
-  const convite = encodeURIComponent(`Entrei na lista de espera do Meu Guia: roteiros de viagem prontos, com mapa correto, partindo do hotel. Entre também: ${window.location.origin}`);
+  const convite = encodeURIComponent(`Entrei na lista de espera do ${MARCA}: ${SLOGAN.titulo.toLowerCase()}, com roteiro personalizado, mapa e assistente de viagem. Entre também: ${window.location.origin}`);
 
   /* e-mail repetido recebe a mesma confirmação: o formulário não revela quem já está na lista */
   const titulo = perfil === "agencia" ? `Recebemos o contato da ${semFormula(dados.agencia)}` : `Você está na lista, ${primeiro}`;
   const texto =
     perfil === "agencia"
       ? `Vamos chamar no WhatsApp ${dados.whatsapp} quando abrirmos para agências, e o aviso também vai para ${email}.`
-      : `Vamos avisar em ${email}${dados.whatsapp ? ` e no WhatsApp ${dados.whatsapp}` : ""} quando o Meu Guia abrir.`;
+      : `Vamos avisar em ${email}${dados.whatsapp ? ` e no WhatsApp ${dados.whatsapp}` : ""} quando o ${MARCA} abrir.`;
 
   return (
     <div className="flex flex-col items-center py-6 text-center animate-pop">

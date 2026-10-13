@@ -1,6 +1,6 @@
 import { IMG, RETRATO_CLAYTON } from "@/conteudo/imagens";
 import { EXEMPLO } from "@/conteudo/exemplo-paris";
-import { TOTAL_VERIFICADAS } from "@/conteudo/site";
+import { MARCA, TOTAL_VERIFICADAS } from "@/conteudo/site";
 import { num } from "@/lib/format";
 import { Avatar, Card } from "@/components/ui";
 import { Container, TituloSecao } from "@/components/base";
@@ -8,7 +8,7 @@ import { FotoComTela } from "@/components/FotoComTela";
 import { MiniChecklist } from "@/components/MiniTelas";
 
 /* ---------------------------------------------------------------------------
-   Curadoria: por que o Meu Guia existe (a IA erra a geografia), quem está
+   Curadoria: por que o produto existe (a IA erra a geografia), quem está
    por trás e como uma atração entra na base. As margens do Sena listadas
    vêm do roteiro de exemplo (calculadas com a geometria real do rio).
 --------------------------------------------------------------------------- */
@@ -28,7 +28,7 @@ export function Curadoria() {
         <div className="lg:col-span-6">
           <TituloSecao
             titulo="O mapa que a IA erra, a gente confere"
-            subtitulo="Roteiros feitos só por inteligência artificial costumam errar a geografia. Já apareceu Arco do Triunfo do lado errado do Sena. No Meu Guia, cada atração passa por um especialista antes de entrar num roteiro."
+            subtitulo={`Roteiros feitos só por inteligência artificial costumam errar a geografia. Já apareceu Arco do Triunfo do lado errado do Sena. No ${MARCA}, cada atração passa por um especialista antes de entrar num roteiro.`}
           />
 
           <dl className="mt-7 grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -48,11 +48,11 @@ export function Curadoria() {
               <Avatar name="Clayton Domingos" src={RETRATO_CLAYTON} size={48} />
               <div className="min-w-0">
                 <p className="text-body font-semibold text-fg">Clayton Domingos</p>
-                <p className="text-body-2 text-muted">Fundador do Meu Guia</p>
+                <p className="text-body-2 text-muted">Fundador do {MARCA}</p>
               </div>
             </div>
             <p className="mt-3 text-body text-fg">
-              Agente de viagens há 25 anos. Trabalhou na matriz da CVC, na área comercial, e foi franqueado da rede. Criou o Meu Guia para quem quer viajar por
+              Agente de viagens há 25 anos. Trabalhou na matriz da CVC, na área comercial, e foi franqueado da rede. Criou o {MARCA} para quem quer viajar por
               conta própria sem abrir mão do cuidado de um agente.
             </p>
             <figure className="mt-3 border-l-2 border-line-strong pl-3">

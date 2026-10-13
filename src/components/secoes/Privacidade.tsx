@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { EMPRESA } from "@/conteudo/site";
+import { EMPRESA, MARCA } from "@/conteudo/site";
 import { Button, Modal } from "@/components/ui";
 
 /* ---------------------------------------------------------------------------
@@ -37,7 +37,7 @@ export function Privacidade() {
       open={aberto}
       onClose={() => setAberto(false)}
       title="Política de privacidade"
-      subtitle="Lista de espera do Meu Guia · atualizada em outubro de 2026"
+      subtitle={`Lista de espera do ${MARCA} · atualizada em outubro de 2026`}
       width={620}
       footer={
         <Button variant="primary" onClick={() => setAberto(false)}>
@@ -58,13 +58,13 @@ export function Privacidade() {
           veio, quando o link tiver essa informação. Nada além do que está no formulário.
         </Bloco>
         <Bloco titulo="Para que usamos">
-          Para avisar quando o Meu Guia abrir e mandar novidades do lançamento. Com agências, para o contato comercial. O destino que você indicar ajuda a escolher as
+          Para avisar quando o {MARCA} abrir e mandar novidades do lançamento. Com agências, para o contato comercial. O destino que você indicar ajuda a escolher as
           próximas cidades.
         </Bloco>
         <Bloco titulo="Com base em quê">Seu consentimento, dado ao enviar o formulário (LGPD, art. 7º, I). Você pode retirá-lo quando quiser.</Bloco>
         <Bloco titulo="Com quem compartilhamos">
-          Com ninguém para fins comerciais: não vendemos nem cedemos seus dados. Eles ficam num provedor de banco de dados contratado, com acesso restrito à equipe do
-          Meu Guia.
+          Com ninguém para fins comerciais: não vendemos nem cedemos seus dados. Eles ficam num provedor de banco de dados contratado, com acesso restrito à equipe do{" "}
+          {MARCA}.
         </Bloco>
         <Bloco titulo="Por quanto tempo">Até 12 meses depois do lançamento, ou até você pedir para sair da lista.</Bloco>
         <Bloco titulo="Seus direitos">

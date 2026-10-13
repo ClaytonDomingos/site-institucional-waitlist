@@ -1,6 +1,7 @@
 import { MapPinned, Moon, Sun } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { cn } from "@/lib/format";
+import { MARCA } from "@/conteudo/site";
 import { IconButton } from "@/components/ui";
 
 /* ---------------------------------------------------------------------------
@@ -8,7 +9,7 @@ import { IconButton } from "@/components/ui";
    ThemeToggle.
 --------------------------------------------------------------------------- */
 
-/** Marca do Meu Guia: quadrado preto com o pino de mapa. */
+/** Marca: quadrado preto com o pino de mapa. */
 export function Logo({ size = 28 }: { size?: number }) {
   return (
     <span className="inline-flex shrink-0 items-center justify-center rounded-tile bg-primary text-primary-fg" style={{ width: size, height: size }}>
@@ -20,9 +21,9 @@ export function Logo({ size = 28 }: { size?: number }) {
 /** Logo + nome. Com `onClick`, volta ao topo. */
 export function Marca({ onClick }: { onClick?: () => void }) {
   return (
-    <button type="button" onClick={onClick} className="focus-ring inline-flex items-center gap-2 rounded-tile" aria-label="Meu Guia, voltar ao topo">
+    <button type="button" onClick={onClick} className="focus-ring inline-flex items-center gap-2 rounded-tile" aria-label={`${MARCA}, voltar ao topo`}>
       <Logo />
-      <span className="text-headline font-semibold text-fg">Meu Guia</span>
+      <span className="text-headline font-semibold text-fg">{MARCA}</span>
     </button>
   );
 }

@@ -1,5 +1,5 @@
 -- =============================================================================
--- Lista de espera do site institucional do Meu Guia
+-- Lista de espera do site institucional (Seja Seu Guia)
 --
 -- A tabela fica fechada para a API pública: nem a chave publicável do site
 -- (papel `anon`) lê ou grava nela direto. O site chama uma única função,

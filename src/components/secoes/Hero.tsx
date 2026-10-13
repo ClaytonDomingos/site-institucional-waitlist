@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BedDouble, Check, ShieldCheck } from "lucide-react";
 import { EXEMPLO } from "@/conteudo/exemplo-paris";
 import { fotoAtracao } from "@/conteudo/imagens";
-import { DESTINOS, ROTEIROS_GRATIS, TOTAL_VERIFICADAS } from "@/conteudo/site";
+import { DESTINOS, MARCA, ROTEIROS_GRATIS, SLOGAN, TOTAL_VERIFICADAS } from "@/conteudo/site";
 import { distancia } from "@/lib/texto";
 import { cn, num } from "@/lib/format";
 import { Badge, Button, Frame } from "@/components/ui";
@@ -10,7 +10,7 @@ import { Container, FUNDO_PAPEL, rolarPara } from "@/components/base";
 import { MapaExemplo } from "@/components/MapaExemplo";
 import { irParaLista } from "./ListaEspera";
 
-/* Hero: a promessa e, ao lado, o que o Meu Guia tem de mais seu — o mapa
+/* Hero: o fecho da campanha ("O mundo do seu jeito") e, ao lado, o mapa
    real do roteiro de exemplo de Paris, partindo do hotel, com cada atração
    do lado certo do Sena. */
 
@@ -37,12 +37,9 @@ export function Hero() {
             </span>
             Lista de espera aberta
           </span>
-          <h1 className="mt-4 text-[34px] leading-[40px] font-semibold text-fg sm:text-[46px] sm:leading-[52px] lg:text-[50px] lg:leading-[56px]">
-            Seu roteiro de viagem pronto, com mapa correto, partindo do seu hotel
-          </h1>
-          <p className="mt-5 max-w-xl text-headline font-normal text-muted">
-            Atrações conferidas por um agente de viagens com 25 anos de turismo, organizadas em dias a partir de onde você vai dormir. Com o caminho de cada trecho, PDF
-            com letra grande e um modo viagem que reajusta o roteiro quando o dia não sai como planejado.
+          <h1 className="mt-4 text-[40px] leading-[46px] font-semibold text-balance text-fg sm:text-[52px] sm:leading-[58px] lg:text-[60px] lg:leading-[66px]">{SLOGAN.titulo}</h1>
+          <p className="mt-5 max-w-xl text-headline font-normal text-pretty text-muted">
+            {SLOGAN.texto} Monte um roteiro com os seus interesses, acompanhe tudo no mapa, mude de ideia sem refazer nada e conte com uma assistente de viagem com IA.
           </p>
 
           <div className="mt-7 flex flex-col gap-2.5 sm:flex-row [&_button]:h-11 [&_button]:px-5">
@@ -79,7 +76,7 @@ export function Hero() {
         <div className="min-w-0 animate-fade-up" style={{ animationDelay: "120ms" }}>
           <Frame
             title={EXEMPLO.titulo.split(":")[0]}
-            subtitle="Roteiro de exemplo, montado pelo Meu Guia"
+            subtitle={`Roteiro de exemplo, montado pelo ${MARCA}`}
             action={
               <Badge tone="blue" size="sm">
                 Mapa real

@@ -42,13 +42,20 @@ const iconeHospedagem = L.divIcon({
   html: `<div style="width:32px;height:32px;transform:translate(-16px,-16px);border-radius:9px;background:#171717;border:2.5px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></div>`,
 });
 
+/* "Você está aqui": o ponto azul pulsando do modo viagem do app */
+const iconeVoce = L.divIcon({
+  className: "mg-marcador",
+  iconSize: [0, 0],
+  html: `<div style="position:relative;width:20px;height:20px;transform:translate(-10px,-10px)"><span class="mg-pulso" style="position:absolute;inset:-8px;border-radius:999px;background:rgba(37,99,235,.25)"></span><span style="position:absolute;inset:0;border-radius:999px;background:#2563eb;border:3px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.4)"></span></div>`,
+});
+
 type Ponto = { lat: number; lng: number };
 
-function Enquadrar({ pontos, chave }: { pontos: Ponto[]; chave: string }) {
+function Enquadrar({ pontos, chave, folga, animar }: { pontos: Ponto[]; chave: string; folga: number; animar: boolean }) {
   const map = useMap();
   useEffect(() => {
     if (!pontos.length) return;
-    map.fitBounds(L.latLngBounds(pontos.map((p) => [p.lat, p.lng] as [number, number])), { padding: [36, 36], maxZoom: 15 });
+    map.fitBounds(L.latLngBounds(pontos.map((p) => [p.lat, p.lng] as [number, number])), { padding: [folga, folga], maxZoom: 15, animate: animar });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chave, map]);
   return null;
@@ -78,7 +85,20 @@ function PopupParada({ p, dia, cor }: { p: ParadaExemplo; dia: number; cor: stri
   );
 }
 
-export function MapaExemplo({ dia, altura, className }: { dia: number | "todos"; altura: number; className?: string }) {
+/** `estatico`: sem interação, controles nem popups (miniaturas). `voce`: o ponto azul de "você está aqui". */
+export function MapaExemplo({
+  dia,
+  altura,
+  className,
+  estatico,
+  voce,
+}: {
+  dia: number | "todos";
+  altura: number;
+  className?: string;
+  estatico?: boolean;
+  voce?: Ponto;
+}) {
   const hosp = EXEMPLO.hospedagem;
   const dias = useMemo(() => (dia === "todos" ? EXEMPLO.dias : EXEMPLO.dias.filter((d) => d.numero === dia)), [dia]);
   const enquadrar = useMemo(() => {
@@ -89,10 +109,24 @@ export function MapaExemplo({ dia, altura, className }: { dia: number | "todos";
 
   return (
     <div role="region" aria-label={`Mapa do roteiro de exemplo: ${EXEMPLO.titulo}`} className={cn("relative isolate overflow-hidden rounded-tile border border-line", className)} style={{ height: altura }}>
-      <MapContainer center={[hosp.lat, hosp.lng]} zoom={13} zoomSnap={0.25} scrollWheelZoom={false} dragging={!toque} className="h-full w-full" style={{ zIndex: 0 }}>
+      <MapContainer
+        center={[hosp.lat, hosp.lng]}
+        zoom={13}
+        zoomSnap={0.25}
+        scrollWheelZoom={false}
+        dragging={!toque && !estatico}
+        touchZoom={!estatico}
+        doubleClickZoom={!estatico}
+        boxZoom={!estatico}
+        keyboard={!estatico}
+        zoomControl={!estatico}
+        attributionControl={!estatico}
+        className="h-full w-full"
+        style={{ zIndex: 0 }}
+      >
         <TileLayer url={TILE_URL} attribution={ATRIBUICAO} maxNativeZoom={16} maxZoom={19} />
         <TileLayer url={TILE_ROTULOS_URL} maxNativeZoom={16} maxZoom={19} />
-        <Enquadrar pontos={enquadrar} chave={String(dia)} />
+        <Enquadrar pontos={enquadrar} chave={String(dia)} folga={estatico ? 16 : 36} animar={!estatico} />
         {dias.map((d) => (
           <Polyline
             key={d.numero}
@@ -100,22 +134,25 @@ export function MapaExemplo({ dia, altura, className }: { dia: number | "todos";
             pathOptions={{ color: d.cor, weight: dia === "todos" ? 3.5 : 4.5, opacity: 0.85, lineCap: "round", lineJoin: "round" }}
           />
         ))}
-        <Marker position={[hosp.lat, hosp.lng]} icon={iconeHospedagem} zIndexOffset={500}>
-          <Popup>
-            <div className="min-w-[180px]">
-              <p className="text-caption text-muted">Hospedagem · partida e chegada</p>
-              <p className="text-body font-semibold text-fg">{hosp.nome}</p>
-              <p className="text-body-2 text-muted">{hosp.endereco}</p>
-            </div>
-          </Popup>
+        <Marker position={[hosp.lat, hosp.lng]} icon={iconeHospedagem} zIndexOffset={500} interactive={!estatico}>
+          {!estatico && (
+            <Popup>
+              <div className="min-w-[180px]">
+                <p className="text-caption text-muted">Hospedagem · partida e chegada</p>
+                <p className="text-body font-semibold text-fg">{hosp.nome}</p>
+                <p className="text-body-2 text-muted">{hosp.endereco}</p>
+              </div>
+            </Popup>
+          )}
         </Marker>
         {dias.flatMap((d) =>
           d.paradas.map((p) => (
-            <Marker key={`${d.numero}-${p.nome}`} position={[p.lat, p.lng]} icon={iconeParada(p.numero, d.cor)} title={p.nome}>
-              <PopupParada p={p} dia={d.numero} cor={d.cor} />
+            <Marker key={`${d.numero}-${p.nome}`} position={[p.lat, p.lng]} icon={iconeParada(p.numero, d.cor)} title={p.nome} interactive={!estatico}>
+              {!estatico && <PopupParada p={p} dia={d.numero} cor={d.cor} />}
             </Marker>
           )),
         )}
+        {voce && <Marker position={[voce.lat, voce.lng]} icon={iconeVoce} zIndexOffset={2000} interactive={false} />}
       </MapContainer>
     </div>
   );

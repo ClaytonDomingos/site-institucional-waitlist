@@ -15,10 +15,12 @@ export const retrato = (id: string) => `${U}${id}?w=200&h=200&q=80&auto=format&f
 
 /** fotos das seções (id do Unsplash · autor), já recortadas na proporção do lugar onde aparecem */
 export const IMG = {
+  /** duas viajantes escolhendo o caminho no mapa, numa rua europeia (o hero do app) · Vitaly Gariev */
+  viajantesComMapa: foto("1752650143291-a049c42b15f2", 1200, 900),
+  /** a mesma turma tirando uma selfie na viagem · Vitaly Gariev */
+  amigosSelfie: foto("1752650143717-d83e7decb6d7", 1200, 900),
   /** plataforma da estação Concorde do metrô de Paris · Miraxh Tereziu */
   metroConcorde: foto("1760281853870-7a0bbf208d11", 1200, 900),
-  /** óculos, lápis e mapa de papel · Oxana V */
-  oculosNoMapa: foto("1516546453174-5e1098a4b4af", 1200, 900),
   /** celular com mapa na rua, à noite · Enrique Alarcon */
   celularMapaNoite: foto("1529775768124-fb874e73ac7e", 1000, 1250),
   /** café de esquina em Paris · Evan Buchholz */
@@ -35,6 +37,15 @@ export const IMG = {
 
 /** retrato usado para o Clayton no app (foto de banco: troque pela foto real) */
 export const RETRATO_CLAYTON = retrato("1738566061874-2160e9f4a064");
+
+/** quem viaja junto, na miniatura de roteiro compartilhado (retratos do app: p05, p21, p08, p02) */
+export const RETRATOS_GRUPO = [
+  { name: "Bia", src: retrato("1494790108377-be9c29b29330") },
+  { name: "Caio", src: retrato("1500648767791-00dcc994a43e") },
+  { name: "Lu", src: retrato("1530983822321-fcac2d3c0f06") },
+  { name: "Rafa", src: retrato("1656074520589-bd325dc7aa4f") },
+  { name: "Duda" },
+];
 
 /** foto pequena de uma atração do roteiro de exemplo (id vindo de exemplo-paris.ts) */
 export const fotoAtracao = (id: string, w = 440) => foto(id, w);

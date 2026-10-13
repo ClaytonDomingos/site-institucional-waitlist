@@ -28,8 +28,3 @@ export const MODO_TRECHO: Record<ModoTrecho, string> = {
 export function euro(v: number): string {
   return `€ ${num(v, Number.isInteger(v) ? 0 : 2)}`;
 }
-
-/** R$ 134,20 */
-export function reais(v: number): string {
-  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
-}

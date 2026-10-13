@@ -1,6 +1,6 @@
-# Meu Guia · site institucional
+# Seja Seu Guia · site institucional
 
-Site de uma página (React 19 + Vite 7 + TypeScript + Tailwind v4) que apresenta o Meu Guia e capta a lista de espera. Como rodar e onde está cada coisa: `README.md`. Lista de espera: `docs/LISTA-DE-ESPERA.md`.
+Site de uma página (React 19 + Vite 7 + TypeScript + Tailwind v4) que apresenta o Seja Seu Guia e capta a lista de espera. O nome está em `MARCA` (`src/conteudo/site.ts`) e no `index.html`; nunca escreva o nome do produto direto num texto. No protótipo do app ele ainda se chama "Meu Guia". Como rodar e onde está cada coisa: `README.md`. Lista de espera: `docs/LISTA-DE-ESPERA.md`.
 
 ## Design = o do app
 
@@ -14,6 +14,7 @@ O visual é o do app do protótipo (`../clayton-ari-meu-guia`, template Tech Sta
 
 ## Conteúdo
 
+- As 6 funcionalidades principais vêm dos criativos da campanha de Instagram, na mesma ordem: `FUNCIONALIDADES` em `src/conteudo/site.ts` alimenta o resumo e os destaques (foto e miniatura de cada uma em `secoes/Funcionalidades.tsx`; "ajustes" na faixa escura de `secoes/ModoViagem.tsx`).
 - Textos, números, destinos, planos e dúvidas: `src/conteudo/site.ts`. URLs de imagem: `src/conteudo/imagens.ts` (só `images.unsplash.com`, com `w`/`h` na proporção do lugar; valide com curl). Não espalhe dados pelas seções.
 - Português do Brasil, frases curtas, sem ponto de exclamação; botões dizem a ação.
 - Roteiro de exemplo (`exemplo-paris.ts`) vem do seed do app: não edite à mão, gere com `scripts/exportar-exemplo.ts`.

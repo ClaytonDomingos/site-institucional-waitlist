@@ -1,5 +1,5 @@
 import { Mail, MapPin, Phone } from "lucide-react";
-import { EMPRESA, SECOES } from "@/conteudo/site";
+import { EMPRESA, MARCA, SECOES, SLOGAN } from "@/conteudo/site";
 import { Marca, ThemeToggle } from "@/components/layout";
 import { Container, rolarPara } from "@/components/base";
 import { irParaLista } from "./ListaEspera";
@@ -15,14 +15,14 @@ export function Rodape() {
         <div className="lg:col-span-5">
           <Marca onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} />
           <p className="mt-3 max-w-sm text-body-2 text-muted">
-            Roteiros de viagem prontos, com mapa correto, partindo do seu hotel. Curadoria de quem vive de turismo há 25 anos.
+            {SLOGAN.titulo}. {SLOGAN.texto} Curadoria de quem vive de turismo há 25 anos.
           </p>
           <div className="mt-4">
             <ThemeToggle />
           </div>
         </div>
         <nav aria-label="Rodapé" className="lg:col-span-3">
-          <p className="text-body font-semibold text-fg">Meu Guia</p>
+          <p className="text-body font-semibold text-fg">{MARCA}</p>
           <ul className="mt-3 space-y-2 text-body-2">
             {SECOES.map((s) => (
               <li key={s.id}>
