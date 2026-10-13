@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BedDouble, Check, ShieldCheck } from "lucide-react";
 import { EXEMPLO } from "@/conteudo/exemplo-paris";
 import { fotoAtracao } from "@/conteudo/imagens";
-import { DESTINOS, MARCA, ROTEIROS_GRATIS, SLOGAN, TOTAL_VERIFICADAS } from "@/conteudo/site";
+import { DESTINOS, MARCA, SLOGAN, TEXTO_GRATIS, TOTAL_VERIFICADAS } from "@/conteudo/site";
 import { distancia } from "@/lib/texto";
 import { cn, num } from "@/lib/format";
 import { Badge, Button, Frame } from "@/components/ui";
@@ -52,7 +52,7 @@ export function Hero() {
           </div>
 
           <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-body-2 text-muted">
-            {["Aviso antes de todo mundo", `${ROTEIROS_GRATIS} roteiros grátis no cadastro`, "Sem cartão de crédito"].map((t) => (
+            {["Aviso antes de todo mundo", `${TEXTO_GRATIS} no cadastro`, "Sem cartão de crédito"].map((t) => (
               <li key={t} className="inline-flex items-center gap-1.5">
                 <Check className="size-4 text-fg" aria-hidden /> {t}
               </li>

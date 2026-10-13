@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Bell, CircleAlert, CircleCheck, MapPinned, MessageCircle, Send, Ticket } from "lucide-react";
 import { IMG } from "@/conteudo/imagens";
-import { DESTINOS, MARCA, ROTEIROS_GRATIS, SLOGAN } from "@/conteudo/site";
+import { DESTINOS, MARCA, SLOGAN, TEXTO_GRATIS_COMPLETO } from "@/conteudo/site";
 import { DESTINO, entrarNaLista, type Perfil } from "@/lib/lista-espera";
 import { emailValido, fmtTelefone, semFormula, telefoneValido } from "@/lib/validar";
 import { Button, Field, Frame, Input, Label, Note, SafeImage, Segmented } from "@/components/ui";
@@ -49,7 +49,7 @@ function validar(perfil: Perfil, d: Dados): Erros {
 
 const BENEFICIOS = [
   { icon: Bell, texto: "Aviso antes de todo mundo, por e-mail e, se quiser, pelo WhatsApp" },
-  { icon: Ticket, texto: `${ROTEIROS_GRATIS} roteiros completos grátis no cadastro, sem cartão` },
+  { icon: Ticket, texto: `${TEXTO_GRATIS_COMPLETO} grátis no cadastro, sem cartão` },
   { icon: MapPinned, texto: "Seu destino entra na fila: os mais pedidos chegam primeiro" },
 ];
 

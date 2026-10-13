@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Map as MapIcon } from "lucide-react";
-import { PLANOS_AGENCIA, PLANOS_VIAJANTE, PRECO_MAPA_VIRTUAL, ROTEIROS_GRATIS } from "@/conteudo/site";
+import { PLANOS_AGENCIA, PLANOS_VIAJANTE, PRECO_MAPA_VIRTUAL, TEXTO_GRATIS_COMPLETO } from "@/conteudo/site";
 import type { Perfil } from "@/lib/lista-espera";
 import { cn } from "@/lib/format";
 import { PricingCard, Segmented } from "@/components/ui";
@@ -21,7 +21,7 @@ export function Planos() {
             titulo="Comece grátis. Pague só se gostar."
             subtitulo={
               publico === "viajante"
-                ? `Todo cadastro ganha ${ROTEIROS_GRATIS} roteiros completos, sem cartão. Depois, escolha o que combina com o tanto que você viaja.`
+                ? `Todo cadastro ganha ${TEXTO_GRATIS_COMPLETO}, sem cartão. Depois, escolha o que combina com o tanto que você viaja.`
                 : "Para agências, o plano é mensal e sem fidelidade. Cada roteiro gerado para um cliente usa 1 da cota do mês."
             }
           />

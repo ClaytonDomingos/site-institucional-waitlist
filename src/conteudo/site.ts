@@ -1,3 +1,4 @@
+import { plural } from "@/lib/format";
 import { foto } from "./imagens";
 
 /* ---------------------------------------------------------------------------
@@ -100,7 +101,12 @@ export const SECOES = [
   { id: "duvidas", label: "Dúvidas" },
 ] as const;
 
-export const ROTEIROS_GRATIS = 2;
+/** roteiros grátis que todo cadastro ganha (quem entra pela lista de espera também) */
+export const ROTEIROS_GRATIS = 1;
+/** "1 roteiro grátis" / "2 roteiros grátis" */
+export const TEXTO_GRATIS = plural(ROTEIROS_GRATIS, "roteiro grátis", "roteiros grátis");
+/** "1 roteiro completo" / "2 roteiros completos" */
+export const TEXTO_GRATIS_COMPLETO = plural(ROTEIROS_GRATIS, "roteiro completo", "roteiros completos");
 
 /** destinos publicados no lançamento, com o nº de atrações verificadas na base */
 export const DESTINOS = [
@@ -137,7 +143,7 @@ export const PLANOS_VIAJANTE: Plano[] = [
     preco: "R$ 0",
     periodo: "no cadastro",
     descricao: "Para experimentar, sem cartão de crédito.",
-    recursos: [`${ROTEIROS_GRATIS} roteiros grátis no cadastro`, "Mapa do roteiro e PDF com letra grande", "Como chegar em cada trecho", `Mapa virtual: + ${PRECO_MAPA_VIRTUAL} por roteiro`],
+    recursos: [`${TEXTO_GRATIS} no cadastro`, "Mapa do roteiro e PDF com letra grande", "Como chegar em cada trecho", `Mapa virtual: + ${PRECO_MAPA_VIRTUAL} por roteiro`],
   },
   {
     id: "avulso",
@@ -213,7 +219,7 @@ export const DUVIDAS = [
   {
     id: "preco",
     q: "Quanto vai custar?",
-    a: `Todo cadastro ganha ${ROTEIROS_GRATIS} roteiros completos, sem cartão. Depois, você escolhe: roteiro avulso por R$ 9,90, Mensal por R$ 49,90 (10 roteiros) ou Anual por R$ 199,90, com roteiros ilimitados e o mapa virtual incluso.`,
+    a: `Todo cadastro ganha ${TEXTO_GRATIS_COMPLETO}, sem cartão. Depois, você escolhe: roteiro avulso por R$ 9,90, Mensal por R$ 49,90 (10 roteiros) ou Anual por R$ 199,90, com roteiros ilimitados e o mapa virtual incluso.`,
   },
   {
     id: "ia",
