@@ -1,5 +1,5 @@
 import { Mail, MapPin, Phone } from "lucide-react";
-import { EMPRESA, MARCA, SECOES, SLOGAN } from "@/conteudo/site";
+import { EMPRESA, SECOES, SLOGAN } from "@/conteudo/site";
 import { Marca, ThemeToggle } from "@/components/layout";
 import { Container, rolarPara } from "@/components/base";
 import { irParaLista } from "./ListaEspera";
@@ -22,7 +22,7 @@ export function Rodape() {
           </div>
         </div>
         <nav aria-label="Rodapé" className="lg:col-span-3">
-          <p className="text-body font-semibold text-fg">{MARCA}</p>
+          <p className="text-body font-semibold text-fg">Navegação</p>
           <ul className="mt-3 space-y-2 text-body-2">
             {SECOES.map((s) => (
               <li key={s.id}>

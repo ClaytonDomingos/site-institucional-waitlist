@@ -1,6 +1,6 @@
 # Seja Seu Guia · site institucional
 
-Site de uma página (React 19 + Vite 7 + TypeScript + Tailwind v4) que apresenta o Seja Seu Guia e capta a lista de espera. O nome está em `MARCA` (`src/conteudo/site.ts`) e no `index.html`; nunca escreva o nome do produto direto num texto. No protótipo do app ele ainda se chama "Meu Guia". Como rodar e onde está cada coisa: `README.md`. Lista de espera: `docs/LISTA-DE-ESPERA.md`.
+Site de uma página (React 19 + Vite 7 + TypeScript + Tailwind v4) que apresenta o Seja Seu Guia e capta a lista de espera. O nome está em `MARCA` (`src/conteudo/site.ts`) e no `index.html`; nunca escreva o nome do produto direto num texto. **Não coloque logo por enquanto** (nem ícone ao lado do nome, nem favicon): a marca é só o nome em texto (`Marca` em `components/layout.tsx`). No protótipo do app ele ainda se chama "Meu Guia". Como rodar e onde está cada coisa: `README.md`. Lista de espera: `docs/LISTA-DE-ESPERA.md`.
 
 ## Design = o do app
 

@@ -1,29 +1,19 @@
-import { MapPinned, Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { cn } from "@/lib/format";
 import { MARCA } from "@/conteudo/site";
 import { IconButton } from "@/components/ui";
 
 /* ---------------------------------------------------------------------------
-   Peças de marca, iguais às do app (components/layout.tsx): Logo, Marca e
-   ThemeToggle.
+   Marca e ThemeToggle (o ThemeToggle é igual ao do app).
+   Ainda não há logo: a marca é só o nome, em texto (pedido do cliente).
 --------------------------------------------------------------------------- */
 
-/** Marca: quadrado preto com o pino de mapa. */
-export function Logo({ size = 28 }: { size?: number }) {
-  return (
-    <span className="inline-flex shrink-0 items-center justify-center rounded-tile bg-primary text-primary-fg" style={{ width: size, height: size }}>
-      <MapPinned style={{ width: size * 0.56, height: size * 0.56 }} strokeWidth={2.2} />
-    </span>
-  );
-}
-
-/** Logo + nome. Com `onClick`, volta ao topo. */
+/** O nome do produto. Com `onClick`, volta ao topo. */
 export function Marca({ onClick }: { onClick?: () => void }) {
   return (
-    <button type="button" onClick={onClick} className="focus-ring inline-flex items-center gap-2 rounded-tile" aria-label={`${MARCA}, voltar ao topo`}>
-      <Logo />
-      <span className="text-headline font-semibold text-fg">{MARCA}</span>
+    <button type="button" onClick={onClick} className="focus-ring rounded-tile text-headline font-semibold text-fg" aria-label={`${MARCA}, voltar ao topo`}>
+      {MARCA}
     </button>
   );
 }

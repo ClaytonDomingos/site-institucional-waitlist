@@ -2,7 +2,7 @@
 
 Site de uma página que apresenta as funcionalidades do **Seja Seu Guia** (plataforma de roteiros de viagem com mapa, cliente: Clayton Domingos) e capta a **lista de espera** do lançamento. Segue o design do app do protótipo (`../clayton-ari-meu-guia`): mesmos tokens, mesmo kit de componentes, mesma fonte, tema claro e escuro.
 
-O nome e as 6 funcionalidades principais vêm dos criativos da campanha de Instagram. No protótipo do app o produto ainda se chama "Meu Guia". Para trocar o nome do site, mude `MARCA` em `src/conteudo/site.ts` e o título/meta do `index.html`.
+O nome e as 6 funcionalidades principais vêm dos criativos da campanha de Instagram. **Ainda não há logo**: no cabeçalho e no rodapé a marca é só o nome, em texto, e a aba do navegador fica sem ícone. No protótipo do app o produto ainda se chama "Meu Guia". Para trocar o nome do site, mude `MARCA` em `src/conteudo/site.ts` e o título/meta do `index.html`.
 
 ## Como rodar
 
