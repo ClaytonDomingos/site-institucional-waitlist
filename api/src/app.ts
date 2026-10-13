@@ -56,7 +56,22 @@ function celula(valor: unknown): string {
   return /[;"\n\r]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t;
 }
 
-const COLUNAS = ["criado_em", "perfil", "nome", "email", "whatsapp", "agencia", "destino", "utm_source", "utm_medium", "utm_campaign"] as const;
+const COLUNAS = [
+  "criado_em",
+  "perfil",
+  "nome",
+  "email",
+  "whatsapp",
+  "agencia",
+  "destino",
+  "quando",
+  "com_quem",
+  "interesses",
+  "viagens_mes",
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+] as const;
 
 export function criarApp(sql: Banco, cfg: Config) {
   const app = new Hono();
@@ -82,7 +97,9 @@ export function criarApp(sql: Banco, cfg: Config) {
     app.get("/api/lista-espera.csv", basicAuth({ username: cfg.admin.usuario, password: cfg.admin.senha, realm: "Lista de espera" }), async (c) => {
       const linhas = await sql`
         select to_char(criado_em at time zone 'America/Sao_Paulo', 'DD/MM/YYYY HH24:MI') as criado_em,
-               perfil, nome, email, whatsapp, agencia, destino, utm_source, utm_medium, utm_campaign
+               perfil, nome, email, whatsapp, agencia, destino,
+               quando, com_quem, array_to_string(interesses, ', ') as interesses, viagens_mes,
+               utm_source, utm_medium, utm_campaign
         from lista_espera
         order by id`;
       const csv = [COLUNAS.join(";"), ...linhas.map((l) => COLUNAS.map((k) => celula(l[k])).join(";"))].join("\r\n");

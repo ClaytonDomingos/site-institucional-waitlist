@@ -642,3 +642,31 @@ html {
 section[id] {
   scroll-margin-top: 64px;
 }
+
+/* quiz da lista de espera: a pergunta seguinte entra por baixo; ao voltar, por cima */
+@keyframes sq-frente {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes sq-volta {
+  from {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@utility animate-quiz-frente {
+  animation: sq-frente 0.36s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@utility animate-quiz-volta {
+  animation: sq-volta 0.36s cubic-bezier(0.22, 1, 0.36, 1) both;
+}

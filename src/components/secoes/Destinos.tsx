@@ -2,7 +2,7 @@ import { MapPinPlus, ShieldCheck } from "lucide-react";
 import { DESTINOS } from "@/conteudo/site";
 import { Badge, Button, Card, SafeImage } from "@/components/ui";
 import { Container, TituloSecao } from "@/components/base";
-import { irParaLista } from "./ListaEspera";
+import { irParaLista } from "@/lib/rota-lista";
 
 /* Destinos do lançamento, com a capa e o nº de atrações verificadas. */
 

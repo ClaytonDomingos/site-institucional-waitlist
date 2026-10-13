@@ -1,7 +1,8 @@
+import type { Perfil, Respostas } from "@/conteudo/lista-espera";
 import { semFormula } from "./validar";
 
 /* ---------------------------------------------------------------------------
-   Lista de espera: para onde vão as inscrições do formulário.
+   Lista de espera: para onde vão as inscrições do quiz.
 
    1. api            VITE_LISTA_ESPERA_API (ex.: /api): a API Hono de api/,
                      que grava no Postgres. Em produção (Railway) o mesmo
@@ -11,24 +12,14 @@ import { semFormula } from "./validar";
                      Serve para apresentar o site, não para captar inscrições.
 
    E-mail repetido recebe a mesma resposta de um novo (a API ignora em
-   silêncio), para o formulário não revelar quem já está na lista.
+   silêncio), para o quiz não revelar quem já está na lista.
    Passo a passo em docs/LISTA-DE-ESPERA.md.
 
    await entrarNaLista({ perfil: "viajante", nome, email });   // erro: Error com mensagem para a tela
 --------------------------------------------------------------------------- */
 
-export type Perfil = "viajante" | "agencia";
-
-export interface Inscricao {
-  perfil: Perfil;
-  nome: string;
-  email: string;
-  whatsapp?: string;
-  /** nome da agência (perfil "agencia") */
-  agencia?: string;
-  /** para onde quer viajar (perfil "viajante") */
-  destino?: string;
-}
+/** as respostas do quiz; perfil, nome e e-mail são obrigatórios */
+export type Inscricao = Respostas & { perfil: Perfil; nome: string; email: string };
 
 export type Destino = "api" | "demonstracao";
 
@@ -42,17 +33,22 @@ const ERRO_REDE = "Não conseguimos falar com o servidor. Confira sua conexão e
 const ERRO_SERVIDOR = "A lista de espera não respondeu agora. Tente de novo em alguns minutos.";
 const ERRO_LIMITE = "Muitas inscrições seguidas deste endereço. Tente de novo em alguns minutos.";
 
-/** a linha que é salva: os campos do formulário + de onde a pessoa veio (UTM) */
+/** a linha que é salva: as respostas do ramo escolhido + de onde a pessoa veio (UTM) */
 function linhaDe(d: Inscricao) {
   const url = new URLSearchParams(window.location.search);
   const utm = (k: string) => semFormula(url.get(k), 100);
+  const viajante = d.perfil === "viajante";
   return {
     perfil: d.perfil,
     nome: semFormula(d.nome) ?? "",
     email: d.email.trim().toLowerCase(),
     whatsapp: semFormula(d.whatsapp, 20),
-    agencia: d.perfil === "agencia" ? semFormula(d.agencia) : null,
-    destino: d.perfil === "viajante" ? semFormula(d.destino) : null,
+    agencia: viajante ? null : semFormula(d.agencia),
+    destino: viajante ? semFormula(d.destino) : null,
+    quando: viajante ? (d.quando ?? null) : null,
+    com_quem: viajante ? (d.com_quem ?? null) : null,
+    interesses: viajante && d.interesses?.length ? d.interesses : null,
+    viagens_mes: viajante ? null : (d.viagens_mes ?? null),
     utm_source: utm("utm_source"),
     utm_medium: utm("utm_medium"),
     utm_campaign: utm("utm_campaign"),

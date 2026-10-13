@@ -2,7 +2,7 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import { EMPRESA, SECOES, SLOGAN } from "@/conteudo/site";
 import { Marca, ThemeToggle } from "@/components/layout";
 import { Container, rolarPara } from "@/components/base";
-import { irParaLista } from "./ListaEspera";
+import { irParaLista } from "@/lib/rota-lista";
 
 const LINK = "focus-ring rounded-badge text-muted hover:text-fg hover:underline";
 

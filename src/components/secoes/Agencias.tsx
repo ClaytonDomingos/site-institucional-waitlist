@@ -5,7 +5,7 @@ import { Button } from "@/components/ui";
 import { Container, TituloSecao } from "@/components/base";
 import { FotoComTela } from "@/components/FotoComTela";
 import { MiniEnvioWhatsApp } from "@/components/MiniTelas";
-import { irParaLista } from "./ListaEspera";
+import { irParaLista } from "@/lib/rota-lista";
 
 /* Para agências (B2B): o roteiro com mapa como um plus na venda da viagem. */
 

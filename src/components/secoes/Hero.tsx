@@ -8,7 +8,7 @@ import { cn, num } from "@/lib/format";
 import { Badge, Button, Frame, SafeImage } from "@/components/ui";
 import { Container, rolarPara } from "@/components/base";
 import { MapaExemplo } from "@/components/MapaExemplo";
-import { irParaLista } from "./ListaEspera";
+import { irParaLista } from "@/lib/rota-lista";
 
 /* Hero: o fecho da campanha ("O mundo do seu jeito") centralizado e, embaixo,
    o palco: a foto das viajantes com os números da curadoria e o mapa real do

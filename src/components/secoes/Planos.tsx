@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Map as MapIcon } from "lucide-react";
 import { PLANOS_AGENCIA, PLANOS_VIAJANTE, PRECO_MAPA_VIRTUAL, TEXTO_GRATIS_COMPLETO } from "@/conteudo/site";
-import type { Perfil } from "@/lib/lista-espera";
+import type { Perfil } from "@/conteudo/lista-espera";
 import { cn } from "@/lib/format";
 import { PricingCard, Segmented } from "@/components/ui";
 import { Container, TituloSecao } from "@/components/base";
-import { irParaLista } from "./ListaEspera";
+import { irParaLista } from "@/lib/rota-lista";
 
 /* Planos previstos para o lançamento (os mesmos do admin do app), para viajantes e agências. */
 

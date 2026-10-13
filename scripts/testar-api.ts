@@ -1,12 +1,14 @@
 /* pnpm testar:api — testa a API da lista de espera contra um Postgres de
    verdade em memória (PGlite falando o protocolo do Postgres, pela mesma
-   biblioteca postgres.js da produção): migração, inscrição, repetido,
-   limpeza de fórmula, validação, limite por IP, CSV com senha e as regras
-   do banco. Não precisa de nada rodando. */
+   biblioteca postgres.js da produção): migração, inscrição, respostas do
+   quiz, repetido, limpeza de fórmula, validação, limite por IP, CSV com
+   senha e as regras do banco. Não precisa de nada rodando. */
 import { PGlite } from "@electric-sql/pglite";
 import { PGLiteSocketServer } from "@electric-sql/pglite-socket";
 import { conectar, migrar } from "../api/src/banco.js";
 import { criarApp } from "../api/src/app.js";
+import { RESPOSTAS } from "../api/src/validar.js";
+import { COM_QUEM, INTERESSES, QUANDO, VIAGENS_MES } from "../src/conteudo/lista-espera.js";
 
 const PORTA = 54329;
 const db = await PGlite.create();
@@ -31,7 +33,19 @@ function esperar(cond: boolean, msg: string) {
 await caso("migração roda e é idempotente", async () => {
   await migrar(sql);
   const arquivos = await migrar(sql);
-  esperar(arquivos.includes("001_lista_espera.sql"), `migrações: ${arquivos}`);
+  esperar(arquivos.join() === "001_lista_espera.sql,002_quiz.sql", `migrações: ${arquivos}`);
+});
+
+await caso("as opções do quiz (site) são as que a API aceita", async () => {
+  const ids = (opcoes: readonly { id: string }[]) => opcoes.map((o) => o.id).join();
+  for (const [nome, site, api] of [
+    ["quando", QUANDO, RESPOSTAS.quando],
+    ["com_quem", COM_QUEM, RESPOSTAS.com_quem],
+    ["interesses", INTERESSES, RESPOSTAS.interesses],
+    ["viagens_mes", VIAGENS_MES, RESPOSTAS.viagens_mes],
+  ] as const) {
+    esperar(ids(site) === api.join(), `${nome}: site ${ids(site)} · API ${api.join()}`);
+  }
 });
 
 const app = criarApp(sql, { admin: { usuario: "admin", senha: "segredo" }, limitePorIp: 50 });
@@ -58,6 +72,39 @@ await caso("agência válida: 204, sem destino", async () => {
   esperar(l?.agencia === "Rota Sul Viagens" && l.destino === null, JSON.stringify(l));
 });
 
+await caso("viajante com as respostas do quiz: interesses sem repetir, na ordem das opções", async () => {
+  const r = await inscrever({
+    perfil: "viajante",
+    nome: "Paula Reis",
+    email: "paula@exemplo.com",
+    destino: "Roma",
+    quando: "3-meses",
+    com_quem: "familia",
+    interesses: ["foto", "mapa", "foto"],
+    viagens_mes: "31-100",
+  });
+  esperar(r.status === 204, `status ${r.status}`);
+  const [l] = await linhas("paula@exemplo.com");
+  esperar(l?.quando === "3-meses" && l.com_quem === "familia" && l.viagens_mes === null, JSON.stringify(l));
+  esperar(JSON.stringify(l.interesses) === '["mapa","foto"]', `interesses ${JSON.stringify(l.interesses)}`);
+});
+
+await caso("agência com o quiz: viagens por mês gravada, respostas de viajante ignoradas", async () => {
+  const r = await inscrever({
+    perfil: "agencia",
+    nome: "Caio Prado",
+    email: "caio@viajebem.com.br",
+    whatsapp: "(21) 99876-1234",
+    agencia: "Viaje Bem",
+    viagens_mes: "31-100",
+    quando: "3-meses",
+    interesses: ["mapa"],
+  });
+  esperar(r.status === 204, `status ${r.status}`);
+  const [l] = await linhas("caio@viajebem.com.br");
+  esperar(l?.viagens_mes === "31-100" && l.quando === null && l.interesses === null, JSON.stringify(l));
+});
+
 await caso("repetido (outra caixa e espaços): mesma resposta 204 e continua 1 linha", async () => {
   const r = await inscrever({ perfil: "viajante", nome: "Outra Pessoa", email: "  MARINA@exemplo.com " });
   esperar(r.status === 204, `status ${r.status}`);
@@ -79,6 +126,10 @@ for (const [nome, corpo, esperado] of [
   ["nome só de símbolos", { perfil: "viajante", nome: "===", email: "t2@exemplo.com" }, 400],
   ["WhatsApp curto", { perfil: "viajante", nome: "Teste", email: "t3@exemplo.com", whatsapp: "1198" }, 400],
   ["agência sem WhatsApp", { perfil: "agencia", nome: "Teste", email: "t4@exemplo.com", agencia: "Agência X" }, 400],
+  ["quando fora da lista", { perfil: "viajante", nome: "Teste", email: "t7@exemplo.com", quando: "ontem" }, 400],
+  ["interesse desconhecido", { perfil: "viajante", nome: "Teste", email: "t8@exemplo.com", interesses: ["mapa", "hack"] }, 400],
+  ["interesses que não são lista", { perfil: "viajante", nome: "Teste", email: "t9@exemplo.com", interesses: "mapa" }, 400],
+  ["viagens por mês fora da lista", { perfil: "agencia", nome: "Teste", email: "t10@exemplo.com", whatsapp: "(11) 98765-4321", agencia: "Agência X", viagens_mes: "999" }, 400],
   ["corpo que não é JSON", "isto não é json", 400],
   ["corpo maior que 8 KB", { perfil: "viajante", nome: "x".repeat(9000), email: "t5@exemplo.com" }, 413],
 ] as const) {
@@ -114,10 +165,12 @@ await caso("CSV com senha: separado por ;, com BOM, sem fórmula", async () => {
   const bytes = new Uint8Array(await r.arrayBuffer());
   esperar(bytes[0] === 0xef && bytes[1] === 0xbb && bytes[2] === 0xbf, "sem BOM");
   const texto = new TextDecoder().decode(bytes);
-  esperar(texto.startsWith("criado_em;perfil;nome;email"), texto.slice(0, 60));
+  esperar(texto.startsWith("criado_em;perfil;nome;email;whatsapp;agencia;destino;quando;com_quem;interesses;viagens_mes;utm_source"), texto.slice(0, 120));
   const corpo = texto.split("\r\n").slice(1).filter(Boolean);
-  esperar(corpo.length === 8, `${corpo.length} linhas`);
+  esperar(corpo.length === 10, `${corpo.length} linhas`);
   esperar(corpo.every((l) => l.split(";").every((cel) => !/^[=+\-@]/.test(cel))), "célula começando com fórmula");
+  const paula = corpo.find((l) => l.includes("paula@exemplo.com")) ?? "";
+  esperar(paula.includes(";3-meses;familia;mapa, foto;;"), paula);
 });
 
 await caso("CSV desligado sem ADMIN_SENHA: 404", async () => {
@@ -140,6 +193,21 @@ await caso("o banco recusa fórmula e e-mail com maiúscula mesmo gravando diret
       (e: { code?: string }) => e.code,
     );
     esperar(erro === "23514", `${nome} / ${email}: ${erro}`);
+  }
+});
+
+await caso("o banco recusa resposta do quiz fora da lista mesmo gravando direto", async () => {
+  const tentativas = [
+    sql`insert into lista_espera (perfil, nome, email, quando) values ('viajante', 'Teste', 't11@exemplo.com', 'ontem')`,
+    sql`insert into lista_espera (perfil, nome, email, interesses) values ('viajante', 'Teste', 't12@exemplo.com', ${sql.array(["mapa", "hack"])})`,
+    sql`insert into lista_espera (perfil, nome, email, interesses) values ('viajante', 'Teste', 't13@exemplo.com', '{}')`,
+  ];
+  for (const [i, t] of tentativas.entries()) {
+    const erro = await t.then(
+      () => null,
+      (e: { code?: string }) => e.code,
+    );
+    esperar(erro === "23514", `tentativa ${i + 1}: ${erro}`);
   }
 });
 

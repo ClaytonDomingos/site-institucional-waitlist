@@ -3,7 +3,7 @@ import { SECOES } from "@/conteudo/site";
 import { Button, Dropdown, IconButton, type MenuItem } from "@/components/ui";
 import { Marca, ThemeToggle } from "@/components/layout";
 import { Container, rolarPara } from "@/components/base";
-import { irParaLista } from "./ListaEspera";
+import { irParaLista } from "@/lib/rota-lista";
 
 /** Cabeçalho fixo: marca, âncoras das seções, tema e a chamada para a lista de espera. */
 export function Cabecalho() {

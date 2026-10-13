@@ -16,7 +16,7 @@ pnpm start          # depois do build: o servidor de produção (site + API), co
 pnpm testar:api     # testa a API contra um Postgres em memória
 ```
 
-Sem configuração, a lista de espera roda em **modo demonstração** (guarda no `localStorage` do navegador, com um aviso no formulário durante o `pnpm dev`). Em produção as inscrições vão para um **PostgreSQL** por uma **API Hono** (`api/`), no mesmo servidor do site, tudo no **Railway**. Passo a passo do deploy e do desenvolvimento em [`docs/LISTA-DE-ESPERA.md`](docs/LISTA-DE-ESPERA.md); variáveis em `.env.example`.
+Sem configuração, a lista de espera roda em **modo demonstração** (guarda no `localStorage` do navegador, com um aviso no quiz durante o `pnpm dev`). Em produção as inscrições vão para um **PostgreSQL** por uma **API Hono** (`api/`), no mesmo servidor do site, tudo no **Railway**. Passo a passo do deploy e do desenvolvimento em [`docs/LISTA-DE-ESPERA.md`](docs/LISTA-DE-ESPERA.md); variáveis em `.env.example`.
 
 ## O que tem na página
 
@@ -33,23 +33,35 @@ Sem configuração, a lista de espera roda em **modo demonstração** (guarda no
 3. **Para agências**: marca própria, WhatsApp, viagem vendida, alertas e cobrança.
 4. **Destinos**, **Planos** (viajantes e agências), **Lista de espera**, **Dúvidas** e rodapé.
 
-Os botões "Entrar na lista", "Quero para minha agência" e "Sugerir um destino" levam ao formulário já com o perfil certo (`irParaLista()`).
+**A lista de espera é um quiz**, uma pergunta por tela, como o `/formulario` do site da Upside. Ele abre por cima da página no endereço `/lista-de-espera`, que também serve de link direto para anúncios. São três etapas:
+
+- **Boas-vindas**.
+- **Perguntas**, uma por tela. O perfil escolhe o caminho:
+  - viajante: destino, quando viaja, com quem e o que mais quer usar;
+  - agência: nome da agência e quantas viagens vende por mês.
+  - Os dois terminam com nome, e-mail e WhatsApp.
+- **Confirmação**.
+
+Os botões "Entrar na lista", "Quero para minha agência" e "Sugerir um destino", os planos e a seção da lista abrem o quiz já no ponto certo, por `irParaLista()`.
 
 ## Onde está cada coisa
 
 ```
 src/
-  conteudo/        textos e números (site.ts), todas as URLs de imagem (imagens.ts), roteiro de exemplo (exemplo-paris.ts)
-  lib/             lista-espera.ts (para onde vão as inscrições), validar.ts, texto.ts; format/hooks/store copiados do app
+  conteudo/        textos e números (site.ts), perguntas do quiz (lista-espera.ts), todas as URLs de imagem (imagens.ts),
+                   roteiro de exemplo (exemplo-paris.ts)
+  lib/             lista-espera.ts (para onde vão as inscrições), rota-lista.ts (o endereço do quiz e irParaLista()),
+                   validar.ts, texto.ts; format/hooks/store copiados do app
   components/
     ui/ charts/    o kit do app, copiado sem alteração
     secoes/        uma seção por arquivo, montadas em pages/Inicio.tsx
+    lista/         QuizListaEspera.tsx: o quiz (boas-vindas, perguntas, confirmação), montado em main.tsx
     MapaExemplo.tsx, MiniTelas.tsx (miniaturas das telas), FotoComTela.tsx, base.tsx, layout.tsx
 api/               servidor Hono: a API da lista de espera (/api) e o site compilado (dist/) no mesmo endereço
   src/             app.ts (rotas), banco.ts (Postgres e migrações), validar.ts, index.ts (sobe o servidor)
-  sql/             a tabela lista_espera (roda sozinha a cada subida)
+  sql/             a tabela lista_espera e as respostas do quiz (rodam sozinhas a cada subida)
 railway.json       build, start e healthcheck do Railway
-scripts/           shot.mjs (capturas), e2e-lista.mjs (teste do formulário), testar-api.ts, db-local.mjs (Postgres em memória),
+scripts/           shot.mjs (capturas), e2e-lista.mjs (teste do quiz), testar-api.ts, db-local.mjs (Postgres em memória),
                    exportar-exemplo.ts (gera o roteiro de exemplo a partir do app)
 docs/LISTA-DE-ESPERA.md
 ```
@@ -61,7 +73,8 @@ Com `pnpm dev` rodando:
 ```bash
 node scripts/shot.mjs 1440 900 .shots/topo.png                  # uma tela; PARTES=1 captura a página toda, tela a tela
 node scripts/shot.mjs 390 844 .shots/lista.png dark lista       # celular, tema escuro, na âncora #lista
-node scripts/e2e-lista.mjs http://localhost:5211/               # formulário de ponta a ponta
+URL=http://localhost:5211/lista-de-espera node scripts/shot.mjs 390 844 .shots/quiz.png   # as boas-vindas do quiz
+node scripts/e2e-lista.mjs http://localhost:5211/               # o quiz de ponta a ponta (também captura cada tela)
 ```
 
 ## Notas

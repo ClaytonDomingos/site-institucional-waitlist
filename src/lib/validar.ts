@@ -1,4 +1,4 @@
-/* Validação e máscara dos campos do formulário (as mesmas regras do app). */
+/* Validação e máscara dos campos do quiz da lista de espera (as mesmas regras do app). */
 
 export const digitos = (v: string) => v.replace(/\D/g, "");
 
