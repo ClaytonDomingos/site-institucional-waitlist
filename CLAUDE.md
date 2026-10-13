@@ -21,10 +21,10 @@ O visual é o do app do protótipo (`../clayton-ari-meu-guia`, template Tech Sta
 
 ## Lista de espera
 
-`src/lib/lista-espera.ts` decide o destino pelas variáveis (Supabase → webhook → localStorage). A tela só chama `entrarNaLista()`. Duas regras de segurança: e-mail repetido recebe a mesma confirmação de um novo (não revelar quem está na lista) e texto livre passa por `semFormula()` (nada começando com `= + - @`, que vira fórmula em planilha). No Supabase a tabela é fechada; o site só chama a função `entrar_na_lista_espera`.
+PostgreSQL + API Hono (`api/`), tudo no Railway, num serviço só: o servidor Hono serve o site (`dist/`) e a API (`/api`). **Não use Supabase** (decisão do cliente). No site, `src/lib/lista-espera.ts` manda para `VITE_LISTA_ESPERA_API` (`/api`, de `.env.production`) ou, sem ela, guarda no localStorage (modo demonstração); a tela só chama `entrarNaLista()`. Duas regras de segurança, no site e na API: e-mail repetido recebe a mesma resposta de um novo (não revelar quem está na lista) e texto livre passa por `semFormula()` (nada começando com `= + - @`, que vira fórmula em planilha; o banco também recusa).
 
-Mudou um campo? Atualize junto: o formulário, `linhaDe()`, a migração em `supabase/migrations`, o `servidor-teste.mjs` e o doc.
+Mudou um campo? Atualize junto: o formulário, `linhaDe()`, `api/src/validar.ts`, um novo `api/sql/00N_….sql` idempotente, os testes (`scripts/testar-api.ts`) e o doc.
 
 ## Checagens antes de entregar
 
-`pnpm build` · `pnpm testar:sql` se mexer na migração · `node scripts/e2e-lista.mjs` com o `pnpm dev` rodando · capturas com `scripts/shot.mjs` (desktop e 390 px, claro e escuro).
+`pnpm build` · `pnpm testar:api` se mexer na API ou no SQL · `node scripts/e2e-lista.mjs` com o `pnpm dev` rodando (com `ADMIN_SENHA` e a API no ar, confere no Postgres) · capturas com `scripts/shot.mjs` (desktop e 390 px, claro e escuro).

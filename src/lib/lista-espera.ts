@@ -1,28 +1,21 @@
+import { semFormula } from "./validar";
+
 /* ---------------------------------------------------------------------------
    Lista de espera: para onde vão as inscrições do formulário.
 
-   O destino sai das variáveis de ambiente (.env.local no dev; painel da
-   hospedagem em produção), nesta ordem:
-
-   1. supabase       VITE_SUPABASE_URL + VITE_SUPABASE_PUBLISHABLE_KEY
-                     Chama a função entrar_na_lista_espera()
-                     (supabase/migrations/20261013120000_lista_espera.sql).
-                     A tabela fica fechada para a API: ninguém lê a lista
-                     pela internet.
-   2. webhook        VITE_LISTA_ESPERA_WEBHOOK
-                     POST de formulário (x-www-form-urlencoded, sem preflight
-                     de CORS) para n8n, Make, Zapier ou Google Apps Script.
-   3. demonstracao   nenhuma variável: guarda no localStorage deste navegador.
+   1. api            VITE_LISTA_ESPERA_API (ex.: /api): a API Hono de api/,
+                     que grava no Postgres. Em produção (Railway) o mesmo
+                     servidor serve o site e a API, e o valor /api já vem de
+                     .env.production.
+   2. demonstracao   sem a variável: guarda no localStorage deste navegador.
                      Serve para apresentar o site, não para captar inscrições.
 
-   E-mail repetido recebe a mesma resposta de um novo (o Supabase ignora em
+   E-mail repetido recebe a mesma resposta de um novo (a API ignora em
    silêncio), para o formulário não revelar quem já está na lista.
-   Passo a passo de cada opção em docs/LISTA-DE-ESPERA.md.
+   Passo a passo em docs/LISTA-DE-ESPERA.md.
 
    await entrarNaLista({ perfil: "viajante", nome, email });   // erro: Error com mensagem para a tela
 --------------------------------------------------------------------------- */
-
-import { semFormula } from "./validar";
 
 export type Perfil = "viajante" | "agencia";
 
@@ -37,18 +30,17 @@ export interface Inscricao {
   destino?: string;
 }
 
-export type Destino = "supabase" | "webhook" | "demonstracao";
+export type Destino = "api" | "demonstracao";
 
-const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL ?? "").trim().replace(/\/+$/, "");
-const SUPABASE_KEY = (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? "").trim();
-const WEBHOOK = (import.meta.env.VITE_LISTA_ESPERA_WEBHOOK ?? "").trim();
+const API = (import.meta.env.VITE_LISTA_ESPERA_API ?? "").trim().replace(/\/+$/, "");
 
-export const DESTINO: Destino = SUPABASE_URL && SUPABASE_KEY ? "supabase" : WEBHOOK ? "webhook" : "demonstracao";
+export const DESTINO: Destino = API ? "api" : "demonstracao";
 
 const CHAVE_DEMO = "meuguia-lista-espera";
 const TEMPO_LIMITE_MS = 12000;
 const ERRO_REDE = "Não conseguimos falar com o servidor. Confira sua conexão e tente de novo.";
 const ERRO_SERVIDOR = "A lista de espera não respondeu agora. Tente de novo em alguns minutos.";
+const ERRO_LIMITE = "Muitas inscrições seguidas deste endereço. Tente de novo em alguns minutos.";
 
 /** a linha que é salva: os campos do formulário + de onde a pessoa veio (UTM) */
 function linhaDe(d: Inscricao) {
@@ -69,37 +61,20 @@ function linhaDe(d: Inscricao) {
 
 type Linha = ReturnType<typeof linhaDe>;
 
-async function comTempoLimite(url: string, init: RequestInit): Promise<Response> {
+async function enviarParaApi(linha: Linha): Promise<void> {
   const ctrl = new AbortController();
   const timer = window.setTimeout(() => ctrl.abort(), TEMPO_LIMITE_MS);
+  let res: Response;
   try {
-    return await fetch(url, { ...init, signal: ctrl.signal });
+    res = await fetch(`${API}/lista-espera`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(linha), signal: ctrl.signal });
   } catch {
     throw new Error(ERRO_REDE);
   } finally {
     window.clearTimeout(timer);
   }
-}
-
-async function salvarNoSupabase(linha: Linha): Promise<void> {
-  const headers: Record<string, string> = { apikey: SUPABASE_KEY, "Content-Type": "application/json" };
-  /* chave antiga (anon, um JWT) também vai no Authorization; a publicável (sb_publishable_…) só no apikey */
-  if (SUPABASE_KEY.startsWith("eyJ")) headers.Authorization = `Bearer ${SUPABASE_KEY}`;
-  /* os parâmetros da função têm o prefixo p_ (p_nome, p_email…) */
-  const parametros = Object.fromEntries(Object.entries(linha).map(([k, v]) => [`p_${k}`, v]));
-  const res = await comTempoLimite(`${SUPABASE_URL}/rest/v1/rpc/entrar_na_lista_espera`, { method: "POST", headers, body: JSON.stringify(parametros) });
+  if (res.status === 429) throw new Error(ERRO_LIMITE);
   if (!res.ok) {
-    console.error("[lista de espera] o Supabase respondeu", res.status);
-    throw new Error(ERRO_SERVIDOR);
-  }
-}
-
-async function enviarAoWebhook(linha: Linha): Promise<void> {
-  const corpo = new URLSearchParams({ criado_em: new Date().toISOString() });
-  for (const [k, v] of Object.entries(linha)) if (v) corpo.set(k, v);
-  const res = await comTempoLimite(WEBHOOK, { method: "POST", body: corpo });
-  if (!res.ok) {
-    console.error("[lista de espera] o webhook respondeu", res.status);
+    console.error("[lista de espera] a API respondeu", res.status);
     throw new Error(ERRO_SERVIDOR);
   }
 }
@@ -119,7 +94,5 @@ async function guardarNoNavegador(linha: Linha): Promise<void> {
 
 export async function entrarNaLista(dados: Inscricao): Promise<void> {
   const linha = linhaDe(dados);
-  if (DESTINO === "supabase") return salvarNoSupabase(linha);
-  if (DESTINO === "webhook") return enviarAoWebhook(linha);
-  return guardarNoNavegador(linha);
+  return DESTINO === "api" ? enviarParaApi(linha) : guardarNoNavegador(linha);
 }

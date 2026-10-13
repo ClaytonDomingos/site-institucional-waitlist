@@ -10,7 +10,7 @@ import { abrirPrivacidade } from "./Privacidade";
 
 /* ---------------------------------------------------------------------------
    Lista de espera (#lista). O formulário grava por lib/lista-espera.ts
-   (Supabase, webhook ou, sem configuração, o localStorage do navegador).
+   (a API Hono, que grava no Postgres, ou, sem configuração, o localStorage do navegador).
 
    Outras seções trazem o visitante para cá já com o perfil certo:
    irParaLista({ perfil: "agencia" }) · irParaLista({ focar: "destino" })
@@ -234,7 +234,7 @@ export function ListaEspera() {
                   )}
                   {import.meta.env.DEV && DESTINO === "demonstracao" && (
                     <Note tone="amber" title="Modo demonstração">
-                      As inscrições ficam só no localStorage deste navegador. Para captar de verdade, configure o Supabase ou um webhook (docs/LISTA-DE-ESPERA.md).
+                      As inscrições ficam só no localStorage deste navegador. Para gravar no Postgres, rode a API (pnpm dev:api) com o .env.local de docs/LISTA-DE-ESPERA.md.
                     </Note>
                   )}
 

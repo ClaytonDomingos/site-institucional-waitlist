@@ -10,10 +10,13 @@ O nome e as 6 funcionalidades principais vêm dos criativos da campanha de Insta
 pnpm install
 pnpm dev            # http://localhost:5211
 pnpm build          # typecheck + build de produção (dist/, estático)
-pnpm testar:sql     # aplica a migração da lista de espera num Postgres em memória e confere as regras
+pnpm db:local       # Postgres em memória (para a API local, sem instalar nada)
+pnpm dev:api        # API Hono da lista de espera em http://localhost:8787 (lê o .env.local)
+pnpm start          # depois do build: o servidor de produção (site + API), como no Railway
+pnpm testar:api     # testa a API contra um Postgres em memória
 ```
 
-Sem configuração, a lista de espera roda em **modo demonstração** (guarda no `localStorage` do navegador, com um aviso no formulário durante o `pnpm dev`). Para captar de verdade, configure o Supabase ou um webhook: passo a passo em [`docs/LISTA-DE-ESPERA.md`](docs/LISTA-DE-ESPERA.md) e variáveis em `.env.example`.
+Sem configuração, a lista de espera roda em **modo demonstração** (guarda no `localStorage` do navegador, com um aviso no formulário durante o `pnpm dev`). Em produção as inscrições vão para um **PostgreSQL** por uma **API Hono** (`api/`), no mesmo servidor do site, tudo no **Railway**. Passo a passo do deploy e do desenvolvimento em [`docs/LISTA-DE-ESPERA.md`](docs/LISTA-DE-ESPERA.md); variáveis em `.env.example`.
 
 ## O que tem na página
 
@@ -43,8 +46,11 @@ src/
     ui/ charts/    o kit do app, copiado sem alteração
     secoes/        uma seção por arquivo, montadas em pages/Inicio.tsx
     MapaExemplo.tsx, MiniTelas.tsx (miniaturas das telas), FotoComTela.tsx, base.tsx, layout.tsx
-supabase/migrations/   lista de espera: tabela fechada para a API + função de inscrição (a única porta do site)
-scripts/           shot.mjs (capturas), e2e-lista.mjs (teste do formulário), servidor-teste.mjs (imita Supabase e webhook),
+api/               servidor Hono: a API da lista de espera (/api) e o site compilado (dist/) no mesmo endereço
+  src/             app.ts (rotas), banco.ts (Postgres e migrações), validar.ts, index.ts (sobe o servidor)
+  sql/             a tabela lista_espera (roda sozinha a cada subida)
+railway.json       build, start e healthcheck do Railway
+scripts/           shot.mjs (capturas), e2e-lista.mjs (teste do formulário), testar-api.ts, db-local.mjs (Postgres em memória),
                    exportar-exemplo.ts (gera o roteiro de exemplo a partir do app)
 docs/LISTA-DE-ESPERA.md
 ```
@@ -67,4 +73,4 @@ node scripts/e2e-lista.mjs http://localhost:5211/               # formulário de
 - **Contato** (e-mail, telefone, endereço) é fictício, como no protótipo: troque pelo real antes de publicar.
 - **Mapa**: tiles Esri World Light Gray (sem chave; a CARTO passou a exigir), como no app.
 - **Política de privacidade**: rascunho para revisão jurídica.
-- **Deploy**: é um site estático (`dist/`). Na Vercel ou Netlify, cadastre as variáveis da lista de espera antes do build.
+- **Deploy**: Railway, com um serviço (este repositório: `railway.json` faz o build do site e da API e sobe o servidor Hono) e um PostgreSQL. Variáveis: `DATABASE_URL` e `ADMIN_SENHA`. Veja `docs/LISTA-DE-ESPERA.md`.

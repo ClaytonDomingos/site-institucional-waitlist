@@ -8,12 +8,21 @@ importers:
 
   .:
     dependencies:
+      '@hono/node-server':
+        specifier: ^2.1.5
+        version: 2.1.5(hono@4.13.13)
+      hono:
+        specifier: ^4.13.13
+        version: 4.13.13
       leaflet:
         specifier: ^1.9.4
         version: 1.9.4
       lucide-react:
         specifier: ^0.544.0
         version: 0.544.0(react@19.3.0)
+      postgres:
+        specifier: ^3.4.9
+        version: 3.4.9
       react:
         specifier: ^19.1.0
         version: 19.3.0
@@ -27,9 +36,12 @@ importers:
       '@electric-sql/pglite':
         specifier: ^0.5.9
         version: 0.5.9
+      '@electric-sql/pglite-socket':
+        specifier: ^0.2.12
+        version: 0.2.12(@electric-sql/pglite-age@0.0.10(@electric-sql/pglite@0.5.9))(@electric-sql/pglite-pg_hashids@0.0.10(@electric-sql/pglite@0.5.9))(@electric-sql/pglite-pg_ivm@0.0.10(@electric-sql/pglite@0.5.9))(@electric-sql/pglite-pg_textsearch@0.0.11(@electric-sql/pglite@0.5.9))(@electric-sql/pglite-pg_uuidv7@0.0.10(@electric-sql/pglite@0.5.9))(@electric-sql/pglite-pgtap@0.0.10(@electric-sql/pglite@0.5.9))(@electric-sql/pglite-pgvector@0.0.10(@electric-sql/pglite@0.5.9))(@electric-sql/pglite@0.5.9)
       '@tailwindcss/vite':
         specifier: ^4.1.13
-        version: 4.3.3(vite@7.3.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.32.0))
+        version: 4.3.3(vite@7.3.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.23.15))
       '@types/leaflet':
         specifier: ^1.9.22
         version: 1.9.22
@@ -44,19 +56,22 @@ importers:
         version: 19.3.0(@types/react@19.3.0)
       '@vitejs/plugin-react':
         specifier: ^5.0.0
-        version: 5.2.0(vite@7.3.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.32.0))
+        version: 5.2.0(vite@7.3.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.23.15))
       playwright-core:
         specifier: ^1.64.0
         version: 1.64.0
       tailwindcss:
         specifier: ^4.1.13
         version: 4.3.3
+      tsx:
+        specifier: ^4.23.15
+        version: 4.23.15
       typescript:
         specifier: ^5.9.2
         version: 5.9.3
       vite:
         specifier: ^7.1.0
-        version: 7.3.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.32.0)
+        version: 7.3.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.23.15)
 
 packages:
 
@@ -142,6 +157,54 @@ packages:
   '@babel/types@7.29.8':
     resolution: {integrity: sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==}
     engines: {node: '>=6.9.0'}
+
+  '@electric-sql/pglite-age@0.0.10':
+    resolution: {integrity: sha512-bq/T5zrG2//h/ARStEMusSphAyYln/y6Y0dzbLPcfgxH/afGV+gQChCUyK0+qwc6/XH9v+fvDKhwjh9cfWLlpA==}
+    peerDependencies:
+      '@electric-sql/pglite': 0.5.9
+
+  '@electric-sql/pglite-pg_hashids@0.0.10':
+    resolution: {integrity: sha512-FgMSepFZZdE2Ct/wjXcE3yEY8ZVNu97n5dyY+0CCgFnLjhyF9LqUbI7altqcc770bjViLtjo03EFV/Pbz7QjMg==}
+    peerDependencies:
+      '@electric-sql/pglite': 0.5.9
+
+  '@electric-sql/pglite-pg_ivm@0.0.10':
+    resolution: {integrity: sha512-pE1YaGfUIGLE8oqcUE5Tdpan4E8DS2t6kXGlzPQqkST/kdPvdSnTzR90sXy2Yv+AdzceCkXDRsSuOT9za9WRtg==}
+    peerDependencies:
+      '@electric-sql/pglite': 0.5.9
+
+  '@electric-sql/pglite-pg_textsearch@0.0.11':
+    resolution: {integrity: sha512-kGc+wT+BL4NbC2BGrHU9faYDDxvnNNy+6nO7YJy0gIczgWSraBRiEGqQ6uGuEgAD62RgeIYuFB/8zKeSWIVQvA==}
+    peerDependencies:
+      '@electric-sql/pglite': 0.5.9
+
+  '@electric-sql/pglite-pg_uuidv7@0.0.10':
+    resolution: {integrity: sha512-r/306RmpwjI0Fs793fodymNfUsHbau5nTNXnsyGEObgVyEdaakU6beEEp45LPtP4xd7kLNlzDbPcDCcaljfKHg==}
+    peerDependencies:
+      '@electric-sql/pglite': 0.5.9
+
+  '@electric-sql/pglite-pgtap@0.0.10':
+    resolution: {integrity: sha512-u6PW6bD9U5MdFVh/4qQtH7PvN+fpQDyYo/ENJ9N73f6ZQ4xwuz5t45+q2/KbSyWHd/G+Ztak6DY37LdeT2Kd/A==}
+    peerDependencies:
+      '@electric-sql/pglite': 0.5.9
+
+  '@electric-sql/pglite-pgvector@0.0.10':
+    resolution: {integrity: sha512-c1R6e5e/syHDhyJNPGHulXHABbQiMeA1bvs8MltQmlM26ki3FXnD1uYLSwJa1mgAIY6Wg1FupF0D371JiR8uDQ==}
+    peerDependencies:
+      '@electric-sql/pglite': 0.5.9
+
+  '@electric-sql/pglite-socket@0.2.12':
+    resolution: {integrity: sha512-+xRn8M6rrGVbk5fa4jt5OSBJrpf8zuSQox3tofhiOklalp+RoQq2vLP7e/KVc2qFumTm3c+wlXn7pKq7A05kpA==}
+    hasBin: true
+    peerDependencies:
+      '@electric-sql/pglite': 0.5.9
+      '@electric-sql/pglite-age': 0.0.10
+      '@electric-sql/pglite-pg_hashids': 0.0.10
+      '@electric-sql/pglite-pg_ivm': 0.0.10
+      '@electric-sql/pglite-pg_textsearch': 0.0.11
+      '@electric-sql/pglite-pg_uuidv7': 0.0.10
+      '@electric-sql/pglite-pgtap': 0.0.10
+      '@electric-sql/pglite-pgvector': 0.0.10
 
   '@electric-sql/pglite@0.5.9':
     resolution: {integrity: sha512-GoQTRMZ/o4J3sMW4mLDtDFGNOm1xy5oH+iHDALWll3uERY6OF4BSnL1t7FZH2Mlw+RPceDBlFJgSaecO73c4EA==}
@@ -301,6 +364,12 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@hono/node-server@2.1.5':
+    resolution: {integrity: sha512-MgP/I06GdvsilDspMk/qmRzpk8LOUStP6jFAbSRi40W09DhoyUn+Mj7eyKICPqeYKybOjVFLVIAQzvu1bfIa7Q==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      hono: ^4 || ^5.0.0-0
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -656,6 +725,10 @@ packages:
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
+  hono@4.13.13:
+    resolution: {integrity: sha512-CQ46U0ZkAGmbT/4UxdzzGJpacP2IeKgY4a5/tOI9AABbpOMfK739wfDXmv1usCk+3RkKj1hQy4/fjhiwa2xlrA==}
+    engines: {node: '>=16.9.0'}
+
   jiti@2.7.0:
     resolution: {integrity: sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ==}
     hasBin: true
@@ -785,6 +858,10 @@ packages:
     resolution: {integrity: sha512-zkd+e9S1AQHhmaBKye9zlFHWjOwVgqXl1q3ECYy8561K7qxR2cREf/STLskulBFd78k6AOFeA+ff1TtEzk9bAA==}
     engines: {node: ^10 || ^12 || >=14}
 
+  postgres@3.4.9:
+    resolution: {integrity: sha512-GD3qdB0x1z9xgFI6cdRD6xu2Sp2WCOEoe3mtnyB5Ee0XrrL5Pe+e4CCnJrRMnL1zYtRDZmQQVbvOttLnKDLnaw==}
+    engines: {node: '>=12'}
+
   react-dom@19.3.0:
     resolution: {integrity: sha512-JDk8dgif51OjFoDE70+OT9ICyYr+69HlmihNwp1+Nsfbna3t5sIiCa9ZJktDmQ4/1b/rn26hIAR2uYXDMr5r0Q==}
     peerDependencies:
@@ -831,6 +908,11 @@ packages:
   tinyglobby@0.2.17:
     resolution: {integrity: sha512-wXR/dYpcqKmfWpEdZjiKJOwCNFndD0DMnrW/cYjVGttEkBfVgcLFHoNrlj47mjOVic9yyNu65alsgF4NQyTa2g==}
     engines: {node: '>=12.0.0'}
+
+  tsx@4.23.15:
+    resolution: {integrity: sha512-Yiex1Ovn8z2xPpOWckIiysV1SSyRMY9BkLF++q0yKiDxCqRhosKfMg3janKkiLBwZ5c/YryloKwGZcrEmtwxKw==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
 
   typescript@5.9.3:
     resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
@@ -1003,6 +1085,45 @@ snapshots:
       '@babel/helper-string-parser': 7.29.7
       '@babel/helper-validator-identifier': 7.29.7
 
+  '@electric-sql/pglite-age@0.0.10(@electric-sql/pglite@0.5.9)':
+    dependencies:
+      '@electric-sql/pglite': 0.5.9
+
+  '@electric-sql/pglite-pg_hashids@0.0.10(@electric-sql/pglite@0.5.9)':
+    dependencies:
+      '@electric-sql/pglite': 0.5.9
+
+  '@electric-sql/pglite-pg_ivm@0.0.10(@electric-sql/pglite@0.5.9)':
+    dependencies:
+      '@electric-sql/pglite': 0.5.9
+
+  '@electric-sql/pglite-pg_textsearch@0.0.11(@electric-sql/pglite@0.5.9)':
+    dependencies:
+      '@electric-sql/pglite': 0.5.9
+
+  '@electric-sql/pglite-pg_uuidv7@0.0.10(@electric-sql/pglite@0.5.9)':
+    dependencies:
+      '@electric-sql/pglite': 0.5.9
+
+  '@electric-sql/pglite-pgtap@0.0.10(@electric-sql/pglite@0.5.9)':
+    dependencies:
+      '@electric-sql/pglite': 0.5.9
+
+  '@electric-sql/pglite-pgvector@0.0.10(@electric-sql/pglite@0.5.9)':
+    dependencies:
+      '@electric-sql/pglite': 0.5.9
+
+  '@electric-sql/pglite-socket@0.2.12(@electric-sql/pglite-age@0.0.10(@electric-sql/pglite@0.5.9))(@electric-sql/pglite-pg_hashids@0.0.10(@electric-sql/pglite@0.5.9))(@electric-sql/pglite-pg_ivm@0.0.10(@electric-sql/pglite@0.5.9))(@electric-sql/pglite-pg_textsearch@0.0.11(@electric-sql/pglite@0.5.9))(@electric-sql/pglite-pg_uuidv7@0.0.10(@electric-sql/pglite@0.5.9))(@electric-sql/pglite-pgtap@0.0.10(@electric-sql/pglite@0.5.9))(@electric-sql/pglite-pgvector@0.0.10(@electric-sql/pglite@0.5.9))(@electric-sql/pglite@0.5.9)':
+    dependencies:
+      '@electric-sql/pglite': 0.5.9
+      '@electric-sql/pglite-age': 0.0.10(@electric-sql/pglite@0.5.9)
+      '@electric-sql/pglite-pg_hashids': 0.0.10(@electric-sql/pglite@0.5.9)
+      '@electric-sql/pglite-pg_ivm': 0.0.10(@electric-sql/pglite@0.5.9)
+      '@electric-sql/pglite-pg_textsearch': 0.0.11(@electric-sql/pglite@0.5.9)
+      '@electric-sql/pglite-pg_uuidv7': 0.0.10(@electric-sql/pglite@0.5.9)
+      '@electric-sql/pglite-pgtap': 0.0.10(@electric-sql/pglite@0.5.9)
+      '@electric-sql/pglite-pgvector': 0.0.10(@electric-sql/pglite@0.5.9)
+
   '@electric-sql/pglite@0.5.9': {}
 
   '@esbuild/aix-ppc64@0.28.2':
@@ -1082,6 +1203,10 @@ snapshots:
 
   '@esbuild/win32-x64@0.28.2':
     optional: true
+
+  '@hono/node-server@2.1.5(hono@4.13.13)':
+    dependencies:
+      hono: 4.13.13
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
@@ -1249,12 +1374,12 @@ snapshots:
       '@tailwindcss/oxide-win32-arm64-msvc': 4.3.3
       '@tailwindcss/oxide-win32-x64-msvc': 4.3.3
 
-  '@tailwindcss/vite@4.3.3(vite@7.3.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.32.0))':
+  '@tailwindcss/vite@4.3.3(vite@7.3.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.23.15))':
     dependencies:
       '@tailwindcss/node': 4.3.3
       '@tailwindcss/oxide': 4.3.3
       tailwindcss: 4.3.3
-      vite: 7.3.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.32.0)
+      vite: 7.3.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.23.15)
 
   '@types/babel__core@7.20.5':
     dependencies:
@@ -1297,7 +1422,7 @@ snapshots:
     dependencies:
       csstype: 3.2.3
 
-  '@vitejs/plugin-react@5.2.0(vite@7.3.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.32.0))':
+  '@vitejs/plugin-react@5.2.0(vite@7.3.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.23.15))':
     dependencies:
       '@babel/core': 7.29.7
       '@babel/plugin-transform-react-jsx-self': 7.29.7(@babel/core@7.29.7)
@@ -1305,7 +1430,7 @@ snapshots:
       '@rolldown/pluginutils': 1.0.0-rc.3
       '@types/babel__core': 7.20.5
       react-refresh: 0.18.0
-      vite: 7.3.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.32.0)
+      vite: 7.3.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.23.15)
     transitivePeerDependencies:
       - supports-color
 
@@ -1379,6 +1504,8 @@ snapshots:
   gensync@1.0.0-beta.2: {}
 
   graceful-fs@4.2.11: {}
+
+  hono@4.13.13: {}
 
   jiti@2.7.0: {}
 
@@ -1469,6 +1596,8 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.2
 
+  postgres@3.4.9: {}
+
   react-dom@19.3.0(react@19.3.0):
     dependencies:
       react: 19.3.0
@@ -1532,6 +1661,12 @@ snapshots:
       fdir: 6.5.0(picomatch@4.0.7)
       picomatch: 4.0.7
 
+  tsx@4.23.15:
+    dependencies:
+      esbuild: 0.28.2
+    optionalDependencies:
+      fsevents: 2.3.3
+
   typescript@5.9.3: {}
 
   undici-types@6.21.0: {}
@@ -1542,7 +1677,7 @@ snapshots:
       escalade: 3.2.0
       picocolors: 1.1.1
 
-  vite@7.3.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.32.0):
+  vite@7.3.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.23.15):
     dependencies:
       esbuild: 0.28.2
       fdir: 6.5.0(picomatch@4.0.7)
@@ -1555,5 +1690,6 @@ snapshots:
       fsevents: 2.3.3
       jiti: 2.7.0
       lightningcss: 1.32.0
+      tsx: 4.23.15
 
   yallist@3.1.1: {}

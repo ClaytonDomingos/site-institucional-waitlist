@@ -1,9 +1,8 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_SUPABASE_URL?: string;
-  readonly VITE_SUPABASE_PUBLISHABLE_KEY?: string;
-  readonly VITE_LISTA_ESPERA_WEBHOOK?: string;
+  /** endereço da API da lista de espera (/api em produção); sem ele, modo demonstração */
+  readonly VITE_LISTA_ESPERA_API?: string;
 }
 
 interface ImportMeta {
