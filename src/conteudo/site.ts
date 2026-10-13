@@ -94,7 +94,6 @@ export const EMPRESA = {
 /** âncoras do cabeçalho e do rodapé, na ordem da página */
 export const SECOES = [
   { id: "funcionalidades", label: "Funcionalidades" },
-  { id: "curadoria", label: "Curadoria" },
   { id: "agencias", label: "Para agências" },
   { id: "destinos", label: "Destinos" },
   { id: "planos", label: "Planos" },

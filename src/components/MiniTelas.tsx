@@ -1,14 +1,12 @@
 import type { ReactNode } from "react";
 import {
   Check,
-  CircleCheck,
   GripVertical,
   Lightbulb,
   Map as MapIcon,
   MessageCircle,
   RefreshCw,
   ScanSearch,
-  ShieldCheck,
   Sparkles,
   Volume2,
   Wallet,
@@ -282,35 +280,6 @@ export function MiniEnvioWhatsApp({ className }: { className?: string }) {
       <span className={cn(BOTAO_PRIMARIO, "mt-3 w-full")}>
         <MessageCircle /> Enviar pelo WhatsApp
       </span>
-    </Mini>
-  );
-}
-
-/* -------------------------------- curadoria ------------------------------- */
-
-export function MiniChecklist({ className }: { className?: string }) {
-  const itens = ["Coordenada confere com o endereço", "Horário de funcionamento atualizado", "Preço do ingresso atualizado", "Foto adequada"];
-  return (
-    <Mini className={className}>
-      <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0">
-          <p className="text-caption font-medium text-muted">Checklist do especialista</p>
-          <p className="text-body font-semibold text-fg">Catedral de Pedra, Canela</p>
-        </div>
-        <Badge tone="blue" size="sm" icon={<ShieldCheck />}>
-          Verificada
-        </Badge>
-      </div>
-      <ul className="mt-3 space-y-2">
-        {itens.map((t) => (
-          <li key={t} className="flex items-center gap-2.5 text-body-2 text-fg">
-            <CheckMark checked /> {t}
-          </li>
-        ))}
-      </ul>
-      <p className="mt-3 flex items-center gap-1.5 border-t border-line pt-2.5 text-caption text-muted">
-        <CircleCheck className="size-3.5 shrink-0 text-lime" /> Validado no Google Places: 38 m de diferença
-      </p>
     </Mini>
   );
 }

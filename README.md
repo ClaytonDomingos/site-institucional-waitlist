@@ -30,9 +30,8 @@ Sem configuração, a lista de espera roda em **modo demonstração** (guarda no
    6. Viajar junto começa no planejamento (compartilhar com amigos e família)
 
    Depois, os recursos de apoio: PDF com letra grande, gastos da comunidade, horários conferidos, ritmo, avisos e instalação na tela inicial.
-3. **Curadoria**: o problema (IA erra a geografia), o Clayton e o checklist do especialista.
-4. **Para agências**: marca própria, WhatsApp, viagem vendida, alertas e cobrança.
-5. **Destinos**, **Planos** (viajantes e agências), **Lista de espera**, **Dúvidas** e rodapé.
+3. **Para agências**: marca própria, WhatsApp, viagem vendida, alertas e cobrança.
+4. **Destinos**, **Planos** (viajantes e agências), **Lista de espera**, **Dúvidas** e rodapé.
 
 Os botões "Entrar na lista", "Quero para minha agência" e "Sugerir um destino" levam ao formulário já com o perfil certo (`irParaLista()`).
 
@@ -67,7 +66,7 @@ node scripts/e2e-lista.mjs http://localhost:5211/               # formulário de
 
 ## Notas
 
-- **Imagens**: Unsplash (`images.unsplash.com`), todas em `src/conteudo/imagens.ts`, validadas (HTTP 200) e conferidas. Capas de destino, fotos das atrações e o retrato do Clayton são as mesmas do app. O retrato é foto de banco: troque pela foto real antes de publicar.
+- **Imagens**: Unsplash (`images.unsplash.com`), todas em `src/conteudo/imagens.ts`, validadas (HTTP 200) e conferidas. Capas de destino e fotos das atrações são as mesmas do app.
 - **Textos das funcionalidades**: título e resumo são os dos criativos (sem o ponto de exclamação; "Perdida?" virou "Se perder?"), em `FUNCIONALIDADES` (`src/conteudo/site.ts`), que alimenta o resumo e os destaques.
 - **Números e preços** (10 destinos, 157 atrações verificadas, planos) vêm da base do protótipo e ficam em `src/conteudo/site.ts`. O roteiro de exemplo foi exportado do seed do app.
 - **Contato** (e-mail, telefone, endereço) é fictício, como no protótipo: troque pelo real antes de publicar.

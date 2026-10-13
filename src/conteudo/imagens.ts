@@ -2,7 +2,7 @@
    TODAS as URLs de imagem do site. Fotos do Unsplash (images.unsplash.com,
    Licença Unsplash: uso comercial livre, sem atribuição obrigatória),
    validadas com curl (200) e conferidas visualmente. As capas dos destinos,
-   as fotos das atrações e o retrato são os mesmos do app
+   as fotos das atrações e os retratos são os mesmos do app
    (clayton-ari-meu-guia/src/mocks/images.ts).
    Nunca use source.unsplash.com (descontinuado).
 --------------------------------------------------------------------------- */
@@ -29,16 +29,11 @@ export const IMG = {
   cafeParis: foto("1635782166219-168a2fe1bd19", 1200, 900),
   /** turista fotografando o Arco do Triunfo com o celular · Harrison Mitchell */
   fotoArcoDoTriunfo: foto("1787575634458-5f1c17a17e05", 1200, 900),
-  /** homem grisalho fotografando um prédio · Stepan */
-  curadorEmCampo: foto("1781710143377-9dfd8585fe3f", 1000, 1250),
   /** atendimento numa mesa de escritório · Amy Hirschi */
   reuniaoAgencia: foto("1551836022-aadb801c60ae", 1200, 900),
   /** janela do avião com a asa ao entardecer · Lawrence Chismorie */
   janelaAviao: foto("1742238861697-b54509120e13", 1200, 900),
 };
-
-/** retrato usado para o Clayton no app (foto de banco: troque pela foto real) */
-export const RETRATO_CLAYTON = retrato("1738566061874-2160e9f4a064");
 
 /** quem viaja junto, na miniatura de roteiro compartilhado (retratos do app: p05, p21, p08, p02) */
 export const RETRATOS_GRUPO = [
