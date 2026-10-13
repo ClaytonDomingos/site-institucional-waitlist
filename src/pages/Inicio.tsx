@@ -4,7 +4,6 @@ import { Funcionalidades, MaisFuncionalidades } from "@/components/secoes/Funcio
 import { ModoViagem } from "@/components/secoes/ModoViagem";
 import { Agencias } from "@/components/secoes/Agencias";
 import { Destinos } from "@/components/secoes/Destinos";
-import { Planos } from "@/components/secoes/Planos";
 import { ListaEspera } from "@/components/secoes/ListaEspera";
 import { Duvidas } from "@/components/secoes/Duvidas";
 import { Rodape } from "@/components/secoes/Rodape";
@@ -12,7 +11,7 @@ import { Rodape } from "@/components/secoes/Rodape";
 /* ---------------------------------------------------------------------------
    O site é uma página só. A ordem conta a história do produto: a promessa
    (mapa correto), o que ele faz, para agências,
-   onde funciona, quanto custa e, por fim, a lista de espera.
+   onde funciona e, por fim, a lista de espera.
 --------------------------------------------------------------------------- */
 
 export function Inicio() {
@@ -26,7 +25,6 @@ export function Inicio() {
         <MaisFuncionalidades />
         <Agencias />
         <Destinos />
-        <Planos />
         <ListaEspera />
         <Duvidas />
       </main>

@@ -31,7 +31,7 @@ Sem configuração, a lista de espera roda em **modo demonstração** (guarda no
 
    Depois, os recursos de apoio: PDF com letra grande, gastos da comunidade, horários conferidos, ritmo, avisos e instalação na tela inicial.
 3. **Para agências**: marca própria, WhatsApp, viagem vendida, alertas e cobrança.
-4. **Destinos**, **Planos** (viajantes e agências), **Lista de espera**, **Dúvidas** e rodapé.
+4. **Destinos**, **Lista de espera**, **Dúvidas** e rodapé.
 
 **A lista de espera é um quiz**, uma pergunta por tela, como o `/formulario` do site da Upside. Ele abre por cima da página no endereço `/lista-de-espera`, que também serve de link direto para anúncios. São três etapas:
 
@@ -42,7 +42,7 @@ Sem configuração, a lista de espera roda em **modo demonstração** (guarda no
   - Os dois terminam com nome, e-mail e WhatsApp.
 - **Confirmação**.
 
-Os botões "Entrar na lista", "Quero para minha agência" e "Sugerir um destino", os planos e a seção da lista abrem o quiz já no ponto certo, por `irParaLista()`.
+Os botões "Entrar na lista", "Quero para minha agência" e "Sugerir um destino" e a seção da lista abrem o quiz já no ponto certo, por `irParaLista()`.
 
 ## Onde está cada coisa
 

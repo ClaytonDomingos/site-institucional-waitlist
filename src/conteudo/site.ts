@@ -96,7 +96,6 @@ export const SECOES = [
   { id: "funcionalidades", label: "Funcionalidades" },
   { id: "agencias", label: "Para agências" },
   { id: "destinos", label: "Destinos" },
-  { id: "planos", label: "Planos" },
   { id: "duvidas", label: "Dúvidas" },
 ] as const;
 
@@ -132,44 +131,6 @@ export interface Plano {
   recursos: Array<string | { label: string; included: boolean }>;
   destaque?: boolean;
 }
-
-export const PRECO_MAPA_VIRTUAL = "R$ 9,90";
-
-export const PLANOS_VIAJANTE: Plano[] = [
-  {
-    id: "gratis",
-    nome: "Grátis",
-    preco: "R$ 0",
-    periodo: "no cadastro",
-    descricao: "Para experimentar, sem cartão de crédito.",
-    recursos: [`${TEXTO_GRATIS} no cadastro`, "Mapa do roteiro e PDF com letra grande", "Como chegar em cada trecho", `Mapa virtual: + ${PRECO_MAPA_VIRTUAL} por roteiro`],
-  },
-  {
-    id: "avulso",
-    nome: "Roteiro avulso",
-    preco: "R$ 9,90",
-    periodo: "/roteiro",
-    descricao: "Um roteiro completo, sem assinatura.",
-    recursos: ["1 roteiro completo, sem assinatura", "Mapa do roteiro e PDF com letra grande", "Como chegar em cada trecho", `Mapa virtual: + ${PRECO_MAPA_VIRTUAL} por roteiro`],
-  },
-  {
-    id: "mensal",
-    nome: "Mensal",
-    preco: "R$ 49,90",
-    periodo: "/mês",
-    descricao: "Para quem planeja várias viagens.",
-    recursos: ["10 roteiros por mês", "Mapa do roteiro e PDF com letra grande", "Como chegar em cada trecho", `Mapa virtual: + ${PRECO_MAPA_VIRTUAL} por roteiro`, "Gerar variações do mesmo roteiro"],
-  },
-  {
-    id: "anual",
-    nome: "Anual",
-    preco: "R$ 199,90",
-    periodo: "/ano",
-    descricao: "Equivale a R$ 16,66 por mês.",
-    recursos: ["Roteiros ilimitados", "Mapa do roteiro e PDF com letra grande", "Como chegar em cada trecho", "Mapa virtual incluso em todos os roteiros", "Reajuste automático no modo viagem"],
-    destaque: true,
-  },
-];
 
 export const PLANOS_AGENCIA: Plano[] = [
   {
