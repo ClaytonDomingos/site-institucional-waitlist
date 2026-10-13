@@ -6,7 +6,6 @@ import { DESTINO, entrarNaLista, type Perfil } from "@/lib/lista-espera";
 import { emailValido, fmtTelefone, semFormula, telefoneValido } from "@/lib/validar";
 import { Button, Field, Frame, Input, Label, Note, SafeImage, Segmented } from "@/components/ui";
 import { Container, FUNDO_PAPEL, TituloSecao, rolarPara } from "@/components/base";
-import { abrirPrivacidade } from "./Privacidade";
 
 /* ---------------------------------------------------------------------------
    Lista de espera (#lista). O formulário grava por lib/lista-espera.ts
@@ -239,12 +238,7 @@ export function ListaEspera() {
                   )}
 
                   <div className="flex flex-col-reverse gap-3 border-t border-line pt-4 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="text-caption text-muted">
-                      Usamos seus dados só para falar do lançamento.{" "}
-                      <button type="button" onClick={abrirPrivacidade} className="focus-ring rounded-badge text-fg underline underline-offset-4">
-                        Política de privacidade
-                      </button>
-                    </p>
+                    <p className="text-caption text-muted">Usamos seus dados só para falar do lançamento.</p>
                     <Button type="submit" variant="primary" size="lg" loading={enviando} icon={<Send className="size-4" />} className="max-sm:h-11 max-sm:w-full">
                       Entrar na lista
                     </Button>

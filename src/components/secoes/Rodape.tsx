@@ -3,7 +3,6 @@ import { EMPRESA, SECOES, SLOGAN } from "@/conteudo/site";
 import { Marca, ThemeToggle } from "@/components/layout";
 import { Container, rolarPara } from "@/components/base";
 import { irParaLista } from "./ListaEspera";
-import { abrirPrivacidade } from "./Privacidade";
 
 const LINK = "focus-ring rounded-badge text-muted hover:text-fg hover:underline";
 
@@ -57,13 +56,7 @@ export function Rodape() {
         </div>
       </Container>
       <Container className="mt-8 flex flex-col gap-2 border-t border-line py-5 text-caption text-muted sm:flex-row sm:justify-between">
-        <span>
-          © {ano} {EMPRESA.nome}
-          {" · "}
-          <button type="button" onClick={abrirPrivacidade} className={LINK}>
-            Política de privacidade
-          </button>
-        </span>
+        <span>© {ano} {EMPRESA.nome}</span>
         <span>Fotos: Unsplash · Mapas: © Esri, © OpenStreetMap contributors</span>
       </Container>
     </footer>

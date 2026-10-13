@@ -68,4 +68,4 @@ ADMIN_SENHA=… node scripts/e2e-lista.mjs http://localhost:8787/   # o formulá
 
 ## LGPD
 
-O formulário pede só o necessário e linka a política de privacidade (`src/components/secoes/Privacidade.tsx`). O texto é um **rascunho**: passe pelo jurídico antes de publicar. Pedidos de exclusão chegam no e-mail de `EMPRESA` (`src/conteudo/site.ts`, hoje um endereço fictício). Para atender, apague a linha pela aba **Data** do Postgres no Railway.
+O formulário pede só o necessário. O site não tem política de privacidade publicada: inclua uma (revisada pelo jurídico) antes de abrir a lista ao público. Pedidos de exclusão chegam no e-mail de `EMPRESA` (`src/conteudo/site.ts`, hoje um endereço fictício). Para atender, apague a linha pela aba **Data** do Postgres no Railway.

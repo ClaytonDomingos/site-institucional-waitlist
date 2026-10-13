@@ -9,7 +9,6 @@ import { Planos } from "@/components/secoes/Planos";
 import { ListaEspera } from "@/components/secoes/ListaEspera";
 import { Duvidas } from "@/components/secoes/Duvidas";
 import { Rodape } from "@/components/secoes/Rodape";
-import { Privacidade } from "@/components/secoes/Privacidade";
 
 /* ---------------------------------------------------------------------------
    O site é uma página só. A ordem conta a história do produto: a promessa
@@ -34,7 +33,6 @@ export function Inicio() {
         <Duvidas />
       </main>
       <Rodape />
-      <Privacidade />
     </div>
   );
 }
