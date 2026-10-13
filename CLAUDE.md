@@ -26,4 +26,4 @@ Mudou um campo? Atualize junto: o formulário, `linhaDe()`, a migração em `sup
 
 ## Checagens antes de entregar
 
-`pnpm build` · `node scripts/e2e-lista.mjs` com o `pnpm dev` rodando · capturas com `scripts/shot.mjs` (desktop e 390 px, claro e escuro).
+`pnpm build` · `pnpm testar:sql` se mexer na migração · `node scripts/e2e-lista.mjs` com o `pnpm dev` rodando · capturas com `scripts/shot.mjs` (desktop e 390 px, claro e escuro).

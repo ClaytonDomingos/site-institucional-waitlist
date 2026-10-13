@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "testar:sql": "node scripts/testar-migracao.mjs"
   },
   "dependencies": {
     "leaflet": "^1.9.4",
@@ -17,6 +18,7 @@
     "react-leaflet": "^5.0.0"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.9",
     "@tailwindcss/vite": "^4.1.13",
     "@types/leaflet": "^1.9.22",
     "@types/node": "^22.18.0",

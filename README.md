@@ -8,6 +8,7 @@ Site de uma página que apresenta as funcionalidades do Meu Guia (plataforma de 
 pnpm install
 pnpm dev            # http://localhost:5211
 pnpm build          # typecheck + build de produção (dist/, estático)
+pnpm testar:sql     # aplica a migração da lista de espera num Postgres em memória e confere as regras
 ```
 
 Sem configuração, a lista de espera roda em **modo demonstração** (guarda no `localStorage` do navegador, com um aviso no formulário durante o `pnpm dev`). Para captar de verdade, configure o Supabase ou um webhook: passo a passo em [`docs/LISTA-DE-ESPERA.md`](docs/LISTA-DE-ESPERA.md) e variáveis em `.env.example`.

@@ -48,7 +48,7 @@ Recomendação: **Supabase**, porque guarda num banco de verdade, já com e-mail
 
 Como a gravação funciona: o site faz `POST /rest/v1/rpc/entrar_na_lista_espera` com o cabeçalho `apikey` e os campos com prefixo `p_` (`p_nome`, `p_email`…). A resposta é a mesma para inscrição nova e repetida. O **Security Advisor** do Supabase pode apontar que uma função `security definer` está liberada para `anon`: é de propósito, ela só insere na lista e tem o `search_path` travado.
 
-O que foi testado (Postgres em memória, como os papéis da API do Supabase): a migração roda duas vezes; `anon` inscreve viajante e agência pela função; repetido (com outra caixa e espaços) é ignorado sem erro; `=`, `+` e `@` no começo são tirados; destino de agência e agência de viajante são descartados; perfil, e-mail, nome vazio e agência sem WhatsApp são recusados; `anon` não lê, não grava direto, não altera e não apaga a tabela; `authenticated` não chama a função; gravando direto como dono, o banco recusa fórmula e e-mail com maiúscula.
+O que `pnpm testar:sql` confere (Postgres em memória, como os papéis da API do Supabase): a migração roda duas vezes; `anon` inscreve viajante e agência pela função; repetido (com outra caixa e espaços) é ignorado sem erro; `=`, `+` e `@` no começo são tirados; destino de agência e agência de viajante são descartados; perfil, e-mail, nome vazio e agência sem WhatsApp são recusados; `anon` não lê, não grava direto, não altera e não apaga a tabela; `authenticated` não chama a função; gravando direto como dono, o banco recusa fórmula e e-mail com maiúscula.
 
 ## Opção 2: webhook do n8n
 
