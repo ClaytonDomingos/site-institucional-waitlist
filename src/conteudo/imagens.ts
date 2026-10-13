@@ -17,6 +17,8 @@ export const retrato = (id: string) => `${U}${id}?w=200&h=200&q=80&auto=format&f
 export const IMG = {
   /** duas viajantes escolhendo o caminho no mapa, numa rua europeia (o hero do app) · Vitaly Gariev */
   viajantesComMapa: foto("1752650143291-a049c42b15f2", 1200, 900),
+  /** as mesmas viajantes, em retrato, ao lado do mapa no hero */
+  viajantesHero: foto("1752650143291-a049c42b15f2", 1000, 1200),
   /** a mesma turma tirando uma selfie na viagem · Vitaly Gariev */
   amigosSelfie: foto("1752650143717-d83e7decb6d7", 1200, 900),
   /** plataforma da estação Concorde do metrô de Paris · Miraxh Tereziu */

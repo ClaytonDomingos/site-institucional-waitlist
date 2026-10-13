@@ -1,48 +1,56 @@
 import { useState } from "react";
 import { BedDouble, Check, ShieldCheck } from "lucide-react";
 import { EXEMPLO } from "@/conteudo/exemplo-paris";
-import { fotoAtracao } from "@/conteudo/imagens";
+import { IMG, fotoAtracao } from "@/conteudo/imagens";
 import { DESTINOS, MARCA, SLOGAN, TEXTO_GRATIS, TOTAL_VERIFICADAS } from "@/conteudo/site";
 import { distancia } from "@/lib/texto";
 import { cn, num } from "@/lib/format";
-import { Badge, Button, Frame } from "@/components/ui";
-import { Container, FUNDO_PAPEL, rolarPara } from "@/components/base";
+import { Badge, Button, Frame, SafeImage } from "@/components/ui";
+import { Container, rolarPara } from "@/components/base";
 import { MapaExemplo } from "@/components/MapaExemplo";
 import { irParaLista } from "./ListaEspera";
 
-/* Hero: o fecho da campanha ("O mundo do seu jeito") e, ao lado, o mapa
-   real do roteiro de exemplo de Paris, partindo do hotel, com cada atração
-   do lado certo do Sena. */
+/* Hero: o fecho da campanha ("O mundo do seu jeito") centralizado e, embaixo,
+   o palco: a foto das viajantes com os números da curadoria e o mapa real do
+   roteiro de exemplo de Paris, partindo do hotel, com cada atração do lado
+   certo do Sena. */
 
 const ARCO = EXEMPLO.dias[0].paradas.find((p) => p.nome === "Arco do Triunfo")!;
+/** "O mundo" + "do seu jeito": a segunda parte sai em cinza */
+const [TITULO_A, TITULO_B] = SLOGAN.titulo.split(/ (?=do )/);
 
 export function Hero() {
   const [dia, setDia] = useState<number | "todos">(1);
-  const [altura] = useState(() => (window.innerWidth < 640 ? 340 : 440));
+  const [altura] = useState(() => (window.innerWidth < 640 ? 320 : 420));
   const diaSel = dia === "todos" ? null : EXEMPLO.dias[dia - 1];
 
   return (
     <section className="relative overflow-hidden border-b border-line">
+      {/* luz suave no alto, sem padrão nenhum */}
       <div
         aria-hidden
-        className="absolute inset-0"
-        style={{ ...FUNDO_PAPEL, maskImage: "linear-gradient(to bottom, black 55%, transparent)", WebkitMaskImage: "linear-gradient(to bottom, black 55%, transparent)" }}
+        className="pointer-events-none absolute inset-x-0 top-0 h-[560px]"
+        style={{ background: "radial-gradient(ellipse 60% 100% at 50% 0%, var(--surface-3), transparent 75%)" }}
       />
-      <Container className="relative grid grid-cols-1 items-center gap-10 pt-8 pb-14 sm:pt-14 sm:pb-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-14 lg:py-20">
-        <div className="animate-fade-up">
-          <span className="inline-flex items-center gap-2 rounded-badge border border-line bg-bg px-2 py-1 text-body-2 font-medium text-fg shadow-xs">
+
+      <Container className="relative pt-12 pb-14 sm:pt-20 sm:pb-20">
+        <div className="mx-auto flex max-w-3xl animate-fade-up flex-col items-center text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-line bg-bg px-3 py-1 text-body-2 font-medium text-fg shadow-xs">
             <span className="relative flex size-2">
               <span className="absolute inset-0 animate-ping rounded-full bg-lime opacity-60" />
               <span className="relative size-2 rounded-full bg-lime" />
             </span>
             Lista de espera aberta
           </span>
-          <h1 className="mt-4 text-[40px] leading-[46px] font-semibold text-balance text-fg sm:text-[52px] sm:leading-[58px] lg:text-[60px] lg:leading-[66px]">{SLOGAN.titulo}</h1>
-          <p className="mt-5 max-w-xl text-headline font-normal text-pretty text-muted">
+
+          <h1 className="mt-5 text-[44px] leading-[48px] font-semibold text-balance text-fg sm:text-[64px] sm:leading-[68px] lg:text-[76px] lg:leading-[80px]">
+            {TITULO_A} {TITULO_B && <span className="text-muted">{TITULO_B}</span>}
+          </h1>
+          <p className="mt-5 max-w-2xl text-headline font-normal text-pretty text-muted">
             {SLOGAN.texto} Monte um roteiro com os seus interesses, acompanhe tudo no mapa, mude de ideia sem refazer nada e conte com uma assistente de viagem com IA.
           </p>
 
-          <div className="mt-7 flex flex-col gap-2.5 sm:flex-row [&_button]:h-11 [&_button]:px-5">
+          <div className="mt-8 flex w-full flex-col justify-center gap-2.5 sm:w-auto sm:flex-row [&_button]:h-11 [&_button]:px-5">
             <Button variant="primary" size="lg" onClick={() => irParaLista()} className="max-sm:w-full">
               Entrar na lista de espera
             </Button>
@@ -51,29 +59,43 @@ export function Hero() {
             </Button>
           </div>
 
-          <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-body-2 text-muted">
+          <ul className="mt-5 flex flex-wrap justify-center gap-x-5 gap-y-2 text-body-2 text-muted">
             {["Aviso antes de todo mundo", `${TEXTO_GRATIS} no cadastro`, "Sem cartão de crédito"].map((t) => (
               <li key={t} className="inline-flex items-center gap-1.5">
                 <Check className="size-4 text-fg" aria-hidden /> {t}
               </li>
             ))}
           </ul>
-
-          <dl className="mt-8 grid max-w-md grid-cols-3 divide-x divide-line border-y border-line py-3">
-            {[
-              { v: num(DESTINOS.length), l: "destinos no lançamento" },
-              { v: num(TOTAL_VERIFICADAS), l: "atrações verificadas" },
-              { v: "25 anos", l: "de turismo na curadoria" },
-            ].map((s) => (
-              <div key={s.l} className="flex flex-col-reverse justify-end px-3 first:pl-0">
-                <dt className="text-caption text-muted">{s.l}</dt>
-                <dd className="text-title-2 font-semibold num text-fg">{s.v}</dd>
-              </div>
-            ))}
-          </dl>
         </div>
 
-        <div className="min-w-0 animate-fade-up" style={{ animationDelay: "120ms" }}>
+        {/* palco: foto + mapa (no celular, o mapa vem primeiro) */}
+        <div className="mt-12 grid animate-fade-up grid-cols-1 gap-3 sm:mt-16 lg:grid-cols-12 lg:gap-4" style={{ animationDelay: "120ms" }}>
+          <div className="relative order-2 aspect-[4/3] overflow-hidden rounded-card border border-line lg:order-1 lg:col-span-5 lg:aspect-auto">
+            <SafeImage src={IMG.viajantesHero} alt="Duas viajantes escolhendo o caminho no mapa, numa rua europeia" eager className="absolute inset-0 h-full w-full" />
+            <div
+              aria-hidden
+              className="absolute inset-0"
+              style={{ background: "linear-gradient(to top, rgb(0 0 0 / 0.72) 0%, rgb(0 0 0 / 0.25) 38%, transparent 60%)" }}
+            />
+            <div className="absolute inset-x-0 bottom-0 p-5 text-solid-fg">
+              <p className="inline-flex items-center gap-1.5 text-body-2 font-medium">
+                <ShieldCheck className="size-4 shrink-0" aria-hidden /> Curadoria de quem vive de turismo
+              </p>
+              <dl className="mt-4 grid grid-cols-3 gap-3 border-t border-solid-fg/25 pt-4">
+                {[
+                  { v: num(DESTINOS.length), l: "destinos no lançamento" },
+                  { v: num(TOTAL_VERIFICADAS), l: "atrações verificadas" },
+                  { v: "25 anos", l: "de turismo" },
+                ].map((s) => (
+                  <div key={s.l} className="flex flex-col-reverse justify-end">
+                    <dt className="text-caption opacity-80">{s.l}</dt>
+                    <dd className="text-title-2 font-semibold num">{s.v}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </div>
+
           <Frame
             title={EXEMPLO.titulo.split(":")[0]}
             subtitle={`Roteiro de exemplo, montado pelo ${MARCA}`}
@@ -83,7 +105,7 @@ export function Hero() {
               </Badge>
             }
             padded={false}
-            className="shadow-dialog"
+            className="order-1 min-w-0 shadow-dialog lg:order-2 lg:col-span-7"
             footer={
               <span className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1">
                 <span className="inline-flex items-center gap-1.5">
