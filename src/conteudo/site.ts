@@ -179,7 +179,7 @@ export const DUVIDAS = [
   {
     id: "preco",
     q: "Quanto vai custar?",
-    a: `Todo cadastro ganha ${TEXTO_GRATIS_COMPLETO}, sem cartão. Depois, você escolhe: roteiro avulso por R$ 9,90, Mensal por R$ 49,90 (10 roteiros) ou Anual por R$ 199,90, com roteiros ilimitados e o mapa virtual incluso.`,
+    a: `Todo cadastro ganha ${TEXTO_GRATIS_COMPLETO}, sem cartão. Os valores dos planos saem no lançamento, e quem está na lista de espera fica sabendo primeiro.`,
   },
   {
     id: "ia",
@@ -209,7 +209,7 @@ export const DUVIDAS = [
   {
     id: "agencia",
     q: "Tenho uma agência de viagens. Como funciona para mim?",
-    a: "A agência gera o roteiro a partir da viagem que vendeu, com o destino, as datas e o hotel já preenchidos, e envia ao cliente pelo WhatsApp com a sua marca. Os planos para agências começam em R$ 149 por mês, sem fidelidade.",
+    a: "A agência gera o roteiro a partir da viagem que vendeu, com o destino, as datas e o hotel já preenchidos, e envia ao cliente pelo WhatsApp com a sua marca. Os planos para agências são mensais e sem fidelidade.",
   },
   {
     id: "dados",
